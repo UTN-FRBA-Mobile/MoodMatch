@@ -31,3 +31,7 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# Pre commit
+.pre-commit-config.yaml
+

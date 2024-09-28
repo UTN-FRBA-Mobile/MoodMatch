@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MoodMatch</string>
+    <string name="mood">Mood</string>
+    <string name="match">Match</string>
+    <string name="leyenda">Matcheá con tu emoción</string>
+    <string name="register">Registrate</string>
+    <string name="ya_registrado">¿Ya te registraste?</string>
+    <string name="ingresa">Ingresá</string>
 </resources>

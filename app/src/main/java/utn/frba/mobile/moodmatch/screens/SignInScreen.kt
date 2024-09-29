@@ -1,4 +1,4 @@
-package utn.frba.mobile.moodmatch.ui.screens
+package utn.frba.mobile.moodmatch.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -32,8 +32,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import utn.frba.mobile.moodmatch.ui.common.Backgroud
-import utn.frba.mobile.moodmatch.ui.common.Header
+import utn.frba.mobile.moodmatch.common.Backgroud
+import utn.frba.mobile.moodmatch.common.Header
 import utn.frba.mobile.moodmatch.R
 
 @Composable

@@ -1,4 +1,4 @@
-package utn.frba.mobile.moodmatch.ui.common
+package utn.frba.mobile.moodmatch.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

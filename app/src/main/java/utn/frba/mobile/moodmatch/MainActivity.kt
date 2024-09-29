@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import utn.frba.mobile.moodmatch.screens.HomeScreen
 import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
 import utn.frba.mobile.moodmatch.screens.SignInScreen
 import utn.frba.mobile.moodmatch.screens.InitialScreen
@@ -27,6 +28,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MoodMatchApp(modifier: Modifier = Modifier) {
 //    InitialScreen("Android")
-    SignInScreen()
+    HomeScreen()
 }
 

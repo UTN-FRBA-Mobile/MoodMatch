@@ -26,5 +26,7 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun MoodMatchApp(modifier: Modifier = Modifier) {
-    InitialScreen("Android")
+//    InitialScreen("Android")
+    SignInScreen()
 }
+

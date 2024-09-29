@@ -6,4 +6,11 @@
     <string name="register">Registrate</string>
     <string name="ya_registrado">¿Ya te registraste?</string>
     <string name="ingresa">Ingresá</string>
+    <string name="bienvenido">Bienvenido de nuevo!</string>
+    <string name="ingresar_con_mail">O ingresá con tu mail</string>
+    <string name="olvidar_contrasena">¿Olvidaste tu contraseño?</string>
+    <string name="google_login">Continuar con Google</string>
+    <string name="email">Dirección de correo</string>
+    <string name="contrasena">Contraseña</string>
+
 </resources>

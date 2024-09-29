@@ -12,8 +12,11 @@
     <color name="primary">#8B4CFC</color>
     <color name="secondary_one">#333333</color>
     <color name="secondary_two">#FFFCF8</color>
+    <color name="off_white">#EBEAEC</color>
+    <color name="off_black">#3F414E</color>
     <color name="energy">#F69149</color>
     <color name="peace">#80C1ED</color>
+    <color name="gray">#A1A4B2</color>
     <color name="gradient_transition_one">#93CCEC</color>
     <color name="gradient_transition_two">#CFCCFB</color>
     <color name="gradient_transition_three">#EFF9F2</color>

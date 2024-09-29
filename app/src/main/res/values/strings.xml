@@ -13,4 +13,16 @@
     <string name="email">Dirección de correo</string>
     <string name="contrasena">Contraseña</string>
 
+    <string name="hola">Hola</string>
+    <string name="peliculas">Películas</string>
+    <string name="libros">Libros</string>
+    <string name="meditaciones">Meditaciones</string>
+    <string name="pelicula">película</string>
+    <string name="libro">libro</string>
+    <string name="actividad">actividad</string>
+    <string name="comunidad">comunidad</string>
+    <string name="home_greeting">Esperamos que MoodMatch pueda ayudarte hoy</string>
+    <string name="esperamos_ayudarte">Esperamos que MoodMatch pueda ayudarte hoy</string>
+    <string name="recomendaciones">Recomendaciones según tus vistas</string>
+    <string name="elegi_recomendacion">Elegí la recomendación que haga match con vos</string>
 </resources>

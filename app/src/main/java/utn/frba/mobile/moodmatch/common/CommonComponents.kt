@@ -46,7 +46,7 @@ import utn.frba.mobile.moodmatch.R
 //Esto va aca?
 enum class Mood(val emojiResId: Int, val moodTextResId: Int) {
     NEUTRAL(R.drawable.ic_emoji_neutral, R.string.neutral_esp),
-    HAPPY(R.drawable.ic_emoji_verygood, R.string.verygood_esp),
+    VERYGOOD(R.drawable.ic_emoji_verygood, R.string.verygood_esp),
     SAD(R.drawable.ic_emoji_sad, R.string.sad_esp),
     INCREDIBLE(R.drawable.ic_emoji_incredible, R.string.incredible_esp),
     ANGRY(R.drawable.ic_emoji_angry, R.string.angry_esp)

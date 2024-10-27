@@ -18,5 +18,10 @@
     <string name="emotion_emoji_esp">Emoji de ánimo</string>
     <string name="home">Home</string>
     <string name="comunity_esp">Comunidad</string>
+    <string name="neutral_esp">Neutral</string>
+    <string name="verygood_esp">Muy bien</string>
+    <string name="sad_esp">Triste</string>
+    <string name="incredible_esp">Increíble</string>
+    <string name="angry_esp">Enojado/a</string>
 
 </resources>

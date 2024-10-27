@@ -41,7 +41,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
+import utn.frba.mobile.moodmatch.common.BottomNavigationBar
 import utn.frba.mobile.moodmatch.common.Header
+import utn.frba.mobile.moodmatch.common.Mood
+import utn.frba.mobile.moodmatch.common.RecommendationCard
 import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -69,7 +72,7 @@ fun RecommendationScreen() {
                 )
 
                 // Emoji y estado de ánimo
-                MoodSection()
+                MoodSection(mood=Mood.NEUTRAL)
 
                 // Recomendaciones
                 RecommendationCarousel()
@@ -81,19 +84,20 @@ fun RecommendationScreen() {
 }
 
 @Composable
-fun MoodSection() {
+fun MoodSection(mood: Mood) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(8.dp)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_neutral_emoji),
-            contentDescription = stringResource(R.string.emotion_emoji_esp),
+            painter = painterResource(id = mood.emojiResId),
+            contentDescription = stringResource(id = mood.moodTextResId),
             modifier = Modifier.size(64.dp)
         )
-        Text(text = "Neutral", fontSize = 16.sp)
+        Text(text = stringResource(id = mood.moodTextResId), fontSize = 16.sp)
     }
 }
+
 
 @Composable
 fun RecommendationCarousel() {
@@ -108,50 +112,6 @@ fun RecommendationCarousel() {
         }
     }
 }
-
-@Composable
-fun RecommendationCard(recommendation: Recommendation) {
-    Card(
-        modifier = Modifier
-            .width(200.dp)
-            .height(200.dp)
-            .clickable { /* Acción al hacer clic en la tarjeta */ },
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White // Color de fondo de la tarjeta
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp // Elevación (sombra) de la tarjeta
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                painter = painterResource(id = recommendation.image),
-                contentDescription = null,
-                modifier = Modifier
-                    .height(100.dp)
-                    .fillMaxWidth(),
-                contentScale = ContentScale.Fit
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = recommendation.title,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = recommendation.subtitle,
-                textAlign = TextAlign.Center,
-                color = Color.Gray
-            )
-        }
-    }
-}
-
 
 @Composable
 fun ActionButtons() {
@@ -171,55 +131,6 @@ fun ActionButtons() {
     }
 }
 
-@Composable
-fun BottomNavigationBar() {
-    NavigationBar(
-        containerColor = Color.Transparent,
-        contentColor = Color.Gray
-    ) {
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painterResource(
-                        id = R.drawable.ic_home
-                    ),
-                    contentDescription = stringResource(R.string.home),
-                    modifier = Modifier.size(20.dp)
-                )
-            },
-            selected = true,
-            onClick = { /* Acción Home */ },
-            label = { Text(text = stringResource(id = R.string.home)) }
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painterResource(id = R.drawable.ic_mood),
-                    contentDescription = stringResource(id = R.string.mood),
-                    modifier = Modifier.size(45.dp),
-                    tint = Color.Unspecified
-                )
-            },
-            selected = false,
-            onClick = { /* Acción Mood */ },
-            label = { Text(text = stringResource(id = R.string.mood)) }
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painterResource(id = R.drawable.ic_community),
-                    contentDescription = stringResource(R.string.comunity_esp),
-                    modifier = Modifier.size(20.dp)
-                )
-            },
-            selected = false,
-            onClick = { /* Acción Comunidad */ },
-            label = { Text(text = stringResource(id = R.string.comunity_esp)) }
-        )
-    }
-}
-
-
 @Preview
 @Composable
 fun RecommendationScreenPreview(){
@@ -229,6 +140,7 @@ fun RecommendationScreenPreview(){
 }
 
 // Datos de ejemplo
+// TODO: Tomar datos de API
 val recommendationList = listOf(
     Recommendation("PELÍCULA", "El señor de la guerra", R.drawable.lord_of_war),
     Recommendation("SERIE", "Westworld", R.drawable.westworld),

@@ -44,7 +44,9 @@ import utn.frba.mobile.moodmatch.common.Backgroud
 import utn.frba.mobile.moodmatch.common.BottomNavigationBar
 import utn.frba.mobile.moodmatch.common.Header
 import utn.frba.mobile.moodmatch.common.Mood
+import utn.frba.mobile.moodmatch.common.Recommendation
 import utn.frba.mobile.moodmatch.common.RecommendationCard
+import utn.frba.mobile.moodmatch.common.RecommendationCarousel
 import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -75,7 +77,7 @@ fun RecommendationScreen() {
                 MoodSection(mood=Mood.NEUTRAL)
 
                 // Recomendaciones
-                RecommendationCarousel()
+                RecommendationCarousel(recommendationList)
 
                 // Botones de acciones
                 ActionButtons()
@@ -95,21 +97,6 @@ fun MoodSection(mood: Mood) {
             modifier = Modifier.size(64.dp)
         )
         Text(text = stringResource(id = mood.moodTextResId), fontSize = 16.sp)
-    }
-}
-
-
-@Composable
-fun RecommendationCarousel() {
-    LazyRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp) // Espacio entre tarjetas
-    ) {
-        items(recommendationList) { recommendation ->
-            RecommendationCard(recommendation)
-        }
     }
 }
 
@@ -142,9 +129,8 @@ fun RecommendationScreenPreview(){
 // Datos de ejemplo
 // TODO: Tomar datos de API
 val recommendationList = listOf(
-    Recommendation("PELÍCULA", "El señor de la guerra", R.drawable.lord_of_war),
-    Recommendation("SERIE", "Westworld", R.drawable.westworld),
+    Recommendation("PELÍCULA", "El señor de la guerra", R.drawable.lord_of_war, 8.0F),
+    Recommendation("SERIE", "Westworld", R.drawable.westworld, 7.5F),
     // Añade más recomendaciones aquí
 )
 
-data class Recommendation(val title: String, val subtitle: String, val image: Int)

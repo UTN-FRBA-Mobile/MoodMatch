@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -40,7 +42,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import utn.frba.mobile.moodmatch.R
-import utn.frba.mobile.moodmatch.screens.Recommendation
 
 //Esto va aca?
 enum class Mood(val emojiResId: Int, val moodTextResId: Int) {
@@ -51,6 +52,7 @@ enum class Mood(val emojiResId: Int, val moodTextResId: Int) {
     ANGRY(R.drawable.ic_emoji_angry, R.string.angry_esp)
 }
 
+data class Recommendation(val title: String, val subtitle: String, val image: Int, val score:Float)
 
 @Composable
 fun Backgroud(): Brush {
@@ -119,11 +121,25 @@ fun Header() {
 }
 
 @Composable
+fun RecommendationCarousel(recommendationList: List<Recommendation> ) {
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp) // Espacio entre tarjetas
+    ) {
+        items(recommendationList) { recommendation ->
+            RecommendationCard(recommendation)
+        }
+    }
+}
+
+@Composable
 fun RecommendationCard(recommendation: Recommendation) {
     Card(
         modifier = Modifier
             .width(200.dp)
-            .height(200.dp)
+            .height(210.dp)
             .clickable { /* Acción al hacer clic en la tarjeta */ },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
@@ -157,6 +173,16 @@ fun RecommendationCard(recommendation: Recommendation) {
                 textAlign = TextAlign.Center,
                 color = Color.Gray
             )
+            Row {
+                Image(
+                    painter = painterResource(id = R.drawable.star),
+                    contentDescription = null)
+                Text(
+                    text = recommendation.score.toString(),
+                    textAlign = TextAlign.Center,
+                    color = Color.Gray
+                )
+            }
         }
     }
 }

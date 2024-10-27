@@ -12,5 +12,16 @@
     <string name="google_login">Continuar con Google</string>
     <string name="email">Dirección de correo</string>
     <string name="contrasena">Contraseña</string>
+    <string name="add_recommendation_to_my_list_esp">Agregar a mi lista</string>
+    <string name="dont_recommend_again_esp">No volver a recomendar</string>
+    <string name="recommendation_screen_greet_esp">Nuestras recomendaciones\nsi te estás sintiendo</string>
+    <string name="emotion_emoji_esp">Emoji de ánimo</string>
+    <string name="home">Home</string>
+    <string name="comunity_esp">Comunidad</string>
+    <string name="neutral_esp">Neutral</string>
+    <string name="verygood_esp">Muy bien</string>
+    <string name="sad_esp">Triste</string>
+    <string name="incredible_esp">Increíble</string>
+    <string name="angry_esp">Enojado/a</string>
 
 </resources>

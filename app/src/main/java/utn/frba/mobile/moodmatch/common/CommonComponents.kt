@@ -2,30 +2,54 @@ package utn.frba.mobile.moodmatch.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import utn.frba.mobile.moodmatch.R
+import utn.frba.mobile.moodmatch.screens.Recommendation
+
+//Esto va aca?
+enum class Mood(val emojiResId: Int, val moodTextResId: Int) {
+    NEUTRAL(R.drawable.ic_emoji_neutral, R.string.neutral_esp),
+    HAPPY(R.drawable.ic_emoji_verygood, R.string.verygood_esp),
+    SAD(R.drawable.ic_emoji_sad, R.string.sad_esp),
+    INCREDIBLE(R.drawable.ic_emoji_incredible, R.string.incredible_esp),
+    ANGRY(R.drawable.ic_emoji_angry, R.string.angry_esp)
+}
 
 
 @Composable
@@ -91,5 +115,97 @@ fun Header() {
 
         }
 
+    }
+}
+
+@Composable
+fun RecommendationCard(recommendation: Recommendation) {
+    Card(
+        modifier = Modifier
+            .width(200.dp)
+            .height(200.dp)
+            .clickable { /* Acción al hacer clic en la tarjeta */ },
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White // Color de fondo de la tarjeta
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 8.dp // Elevación (sombra) de la tarjeta
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = recommendation.image),
+                contentDescription = null,
+                modifier = Modifier
+                    .height(100.dp)
+                    .fillMaxWidth(),
+                contentScale = ContentScale.Fit
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = recommendation.title,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = recommendation.subtitle,
+                textAlign = TextAlign.Center,
+                color = Color.Gray
+            )
+        }
+    }
+}
+
+
+@Composable
+fun BottomNavigationBar() {
+    NavigationBar(
+        containerColor = Color.Transparent,
+        contentColor = Color.Gray
+    ) {
+        NavigationBarItem(
+            icon = {
+                Icon(
+                    painterResource(
+                        id = R.drawable.ic_home
+                    ),
+                    contentDescription = stringResource(R.string.home),
+                    modifier = Modifier.size(20.dp)
+                )
+            },
+            selected = true,
+            onClick = { /* Acción Home */ },
+            label = { Text(text = stringResource(id = R.string.home)) }
+        )
+        NavigationBarItem(
+            icon = {
+                Icon(
+                    painterResource(id = R.drawable.ic_mood),
+                    contentDescription = stringResource(id = R.string.mood),
+                    modifier = Modifier.size(45.dp),
+                    tint = Color.Unspecified
+                )
+            },
+            selected = false,
+            onClick = { /* Acción Mood */ },
+            label = { Text(text = stringResource(id = R.string.mood)) }
+        )
+        NavigationBarItem(
+            icon = {
+                Icon(
+                    painterResource(id = R.drawable.ic_community),
+                    contentDescription = stringResource(R.string.comunity_esp),
+                    modifier = Modifier.size(20.dp)
+                )
+            },
+            selected = false,
+            onClick = { /* Acción Comunidad */ },
+            label = { Text(text = stringResource(id = R.string.comunity_esp)) }
+        )
     }
 }

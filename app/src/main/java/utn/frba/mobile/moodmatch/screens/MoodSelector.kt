@@ -56,7 +56,7 @@ fun MoodSelectorScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Header()
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(50.dp))
             HeaderSection()
             Spacer(modifier = Modifier.height(32.dp))
             MoodSelectorSection()
@@ -111,7 +111,7 @@ fun MoodSelectorSection() {
             listState.animateScrollToItem(
                 selectedMoodIndex,
                 // Compensar para centrar el elemento seleccionado
-                scrollOffset = -listState.layoutInfo.viewportEndOffset / 2
+                scrollOffset = -listState.layoutInfo.viewportEndOffset / 4
             )
         }
     }

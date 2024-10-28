@@ -10,6 +10,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
 import utn.frba.mobile.moodmatch.screens.SignInScreen
 import utn.frba.mobile.moodmatch.screens.InitialScreen
+import utn.frba.mobile.moodmatch.screens.MoodSelectorScreen
 import utn.frba.mobile.moodmatch.screens.RecommendationScreen
 
 class MainActivity : ComponentActivity() {
@@ -29,6 +30,7 @@ class MainActivity : ComponentActivity() {
 fun MoodMatchApp(modifier: Modifier = Modifier) {
     //InitialScreen("Android")
     //SignInScreen()
-    RecommendationScreen()
+    //RecommendationScreen()
+    MoodSelectorScreen()
 }
 

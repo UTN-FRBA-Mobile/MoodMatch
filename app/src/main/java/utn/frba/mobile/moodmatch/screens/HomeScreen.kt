@@ -16,12 +16,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -61,14 +66,16 @@ fun HomeContent() {
         modifier = Modifier.fillMaxSize(),
     ) {
         UserGreeting()
-        //Titles()
+        Spacer(modifier = Modifier.height(10.dp))
+        Titles()
         RecommendationButtons()
+        Recomendations()
     }
 }
 
 @Composable
 fun UserGreeting() {
-    Box(modifier = Modifier.fillMaxWidth(),contentAlignment = Alignment.Center) {
+    Box(modifier = Modifier.height(50.dp),contentAlignment = Alignment.Center) {
         Row (modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
@@ -76,10 +83,11 @@ fun UserGreeting() {
                 contentDescription = "ProfilePicture",
                 modifier = Modifier
                     .size(40.dp)
+
                     .clip(CircleShape),
             )
             Spacer(modifier = Modifier.width(10.dp))
-            Text(modifier = Modifier.padding(top = 28.dp, bottom = 28.dp),
+            Text(modifier = Modifier.padding(top = 0.dp, bottom = 0.dp),
                 text = "¡" + stringResource(id = R.string.hola) + ", " + userName + "!"
                     .uppercase(),
                 fontFamily = FontFamily(
@@ -87,7 +95,7 @@ fun UserGreeting() {
                 ),
 
                 style = TextStyle(
-                    fontSize = 14.sp
+                    fontSize = 18.sp
 
                 ),
             )
@@ -99,9 +107,7 @@ fun UserGreeting() {
 @Composable
 fun Titles() {
     Box(modifier = Modifier.fillMaxWidth(),contentAlignment = Alignment.Center) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-        ) {
+        Column() {
             Text(
                 modifier = Modifier,
                 text = stringResource(id = R.string.home_greeting),
@@ -123,6 +129,7 @@ fun Titles() {
                     fontSize = 13.sp,
                 ),
             )
+            Spacer(modifier = Modifier.height(10.dp))
         }
 
     }
@@ -139,27 +146,91 @@ fun RecommendationButtons() {
                         painter = painterResource(R.drawable.peliculas),
                         contentDescription = "peliculas",
                         modifier = Modifier
-                            .size(170.dp)
-                            .background(Color.Red)
+                            .weight(1f)
+                            .aspectRatio(1f),
+                        contentScale = ContentScale.Crop
                     )
-                    Spacer(modifier = Modifier.width(5.dp))
+                    Spacer(modifier = Modifier.width(10.dp))
                     Image(
                         painter = painterResource(R.drawable.libros),
                         contentDescription = "libros",
                         modifier = Modifier
-                            .size(170.dp)
+                            .weight(1f)
+                            .aspectRatio(1f),
+                        contentScale = ContentScale.Crop
                     )
                 }
-                Spacer(modifier = Modifier.height(5.dp))
                 Image(
                     painter = painterResource(R.drawable.meditaciones),
                     contentDescription = "meditaciones",
                     modifier = Modifier
-                        .size(340.dp)
-                        .aspectRatio(21f / 9f)
-                        .background(Color.Red)
+                        .size(345.dp,90.dp),
+                    contentScale = ContentScale.Crop
                 )
+                Spacer(modifier = Modifier.height(10.dp))
             }
         }
     }
+
+@Composable
+fun Recomendations() {
+    Box(modifier = Modifier.fillMaxWidth(),contentAlignment = Alignment.Center) {
+        Column() {
+            Text(
+                modifier = Modifier,
+                text = stringResource(id = R.string.recomendaciones),
+                fontFamily = FontFamily(
+                    Font(R.font.poppins_bold)
+                ),
+                style = TextStyle(
+                    fontSize = 18.sp,
+                ),
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            // tarjeta de carrousel
+            Box(modifier = Modifier.background(Color.Red)) {
+                Column  (verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.libros),
+                        contentDescription = "libros",
+                        modifier = Modifier
+                            .weight(1f)
+                            .aspectRatio(1f),
+                        contentScale = ContentScale.Crop
+                    )
+
+                Text(
+                    modifier = Modifier,
+                    text = "PELICULA RANDOM",
+                    fontFamily = FontFamily(
+                        Font(R.font.poppins_bold)
+                    ),
+                    style = TextStyle(
+                        fontSize = 10.sp,
+                    ),
+                )
+                Row {
+                    Icon(
+                        Icons.Rounded.Star,
+                        contentDescription = "7,5"
+                    )
+                    Text(
+                        modifier = Modifier,
+                        text = stringResource(id = R.string.recomendaciones),
+                        fontFamily = FontFamily(
+                            Font(R.font.poppins_normal)
+                        ),
+                        style = TextStyle(
+                            fontSize = 10.sp,
+                        ),
+                    )
+                }
+                }
+            }
+        }
+    }
+}
+
 

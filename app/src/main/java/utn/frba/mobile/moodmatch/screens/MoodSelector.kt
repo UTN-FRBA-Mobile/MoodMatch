@@ -78,12 +78,12 @@ fun HeaderSection() {
         Spacer(modifier = Modifier.weight(1f))
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = "¿Cuál es tu mood hoy?",
+                text = stringResource(R.string.whats_your_mood_esp),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "Seleccioná el que te refleje en este momento",
+                text = stringResource(R.string.select_mood_esp),
                 fontSize = 14.sp
             )
         }

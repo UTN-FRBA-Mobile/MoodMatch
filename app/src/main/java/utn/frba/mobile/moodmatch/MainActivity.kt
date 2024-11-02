@@ -12,6 +12,7 @@ import utn.frba.mobile.moodmatch.screens.SignInScreen
 import utn.frba.mobile.moodmatch.screens.InitialScreen
 import utn.frba.mobile.moodmatch.screens.MoodSelectorScreen
 import utn.frba.mobile.moodmatch.screens.RecommendationScreen
+import utn.frba.mobile.moodmatch.screens.ReviewScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +32,7 @@ fun MoodMatchApp(modifier: Modifier = Modifier) {
     //InitialScreen("Android")
     //SignInScreen()
     //RecommendationScreen()
-    MoodSelectorScreen()
+    //MoodSelectorScreen()
+    ReviewScreen("Lord of War")
 }
 

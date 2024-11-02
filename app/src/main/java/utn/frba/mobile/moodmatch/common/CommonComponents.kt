@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -175,7 +177,7 @@ fun RecommendationCard(recommendation: Recommendation) {
             )
             Row {
                 Image(
-                    painter = painterResource(id = R.drawable.star),
+                    painter = painterResource(id = R.drawable.ic_star_outline),
                     contentDescription = null)
                 Text(
                     text = recommendation.score.toString(),
@@ -232,6 +234,29 @@ fun BottomNavigationBar() {
             selected = false,
             onClick = { /* Acción Comunidad */ },
             label = { Text(text = stringResource(id = R.string.comunity_esp)) }
+        )
+    }
+}
+
+//TODO: pasar funcion como parametro? para el onClick
+@Composable
+fun PurpleButton(text: String) {
+    Button(
+        onClick = { /* Acción de selección */ },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 48.dp)
+            .height(50.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color(0xFF7B61FF),
+            contentColor = Color.White
+        ),
+        shape = RoundedCornerShape(24.dp)
+    ) {
+        Text(
+            text = text,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
         )
     }
 }

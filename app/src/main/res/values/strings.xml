@@ -25,5 +25,9 @@
     <string name="angry_esp">Enojado/a</string>
     <string name="select_mood_esp">Seleccioná el que te refleje en este momento</string>
     <string name="whats_your_mood_esp">¿Cuál es tu mood hoy?</string>
+    <string name="select_esp">Seleccionar</string>
+    <string name="leave_your_opinion_esp">Dejá tu opinión sobre</string>
+    <string name="ready_esp">Listo</string>
+    <string name="leave_your_review_here_esp">Escribe tu reseña aquí...</string>
 
 </resources>

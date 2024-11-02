@@ -9,13 +9,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,6 +32,7 @@ import utn.frba.mobile.moodmatch.common.Backgroud
 import utn.frba.mobile.moodmatch.common.BottomNavigationBar
 import utn.frba.mobile.moodmatch.common.Header
 import utn.frba.mobile.moodmatch.common.Mood
+import utn.frba.mobile.moodmatch.common.PurpleButton
 import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -61,7 +54,7 @@ fun MoodSelectorScreen() {
             Spacer(modifier = Modifier.height(32.dp))
             MoodSelectorSection()
             Spacer(modifier = Modifier.height(32.dp))
-            SelectButtonSection()
+            PurpleButton(stringResource(R.string.select_esp))
         }
     }
 }
@@ -163,30 +156,6 @@ fun MoodSelectorSection() {
                 )
             }
         }
-    }
-}
-
-
-//TODO: generalizar para pasar a commons
-@Composable
-fun SelectButtonSection() {
-    Button(
-        onClick = { /* Acción de selección */ },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 48.dp)
-            .height(50.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF7B61FF),
-            contentColor = Color.White
-        ),
-        shape = RoundedCornerShape(24.dp)
-    ) {
-        Text(
-            text = "Seleccionar",
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
-        )
     }
 }
 

@@ -53,7 +53,7 @@ fun MoodMatchApp(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun SignInScreen(modifier: Modifier = Modifier) {
+fun SignInScreen(goNext:  () -> Unit = {}, modifier: Modifier = Modifier) {
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Backgroud())
@@ -62,7 +62,7 @@ fun SignInScreen(modifier: Modifier = Modifier) {
         Column {
             Header()
             Title()
-            SignInContent()
+            SignInContent(goNext)
         }
     }
 }
@@ -87,7 +87,7 @@ fun Title() {
 }
 
 @Composable
-fun SignInContent() {
+fun SignInContent(goNext: () -> Unit = {}) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -110,7 +110,7 @@ fun SignInContent() {
         }
 
         SiginForm()
-        SigninButton()
+        SigninButton(goNext)
         ForgotPassword()
     }
 }
@@ -216,13 +216,13 @@ fun LoginField(value: String,
 }
 
 @Composable
-fun SigninButton() {
+fun SigninButton(goNext: () -> Unit = {}) {
     Box(modifier = Modifier
         .fillMaxWidth()
         .padding(top = 10.dp, bottom = 20.dp)
     ) {
         OutlinedButton(
-            onClick = { print("Hello") },
+            onClick = { goNext() },
             border = BorderStroke(2.dp, colorResource(id = R.color.primary)),
             modifier = Modifier.fillMaxWidth()
         )

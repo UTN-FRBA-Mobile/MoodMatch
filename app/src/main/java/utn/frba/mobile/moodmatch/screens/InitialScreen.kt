@@ -28,7 +28,11 @@ import utn.frba.mobile.moodmatch.common.Backgroud
 import utn.frba.mobile.moodmatch.common.Header
 
 @Composable
-fun InitialScreen(name: String, modifier: Modifier = Modifier) {
+fun InitialScreen(
+    name: String,
+    goNext:  () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Backgroud()),
@@ -44,7 +48,7 @@ fun InitialScreen(name: String, modifier: Modifier = Modifier) {
 
     ) {
         Column {
-            Registro()
+            Registro(goNext)
             InicioSesion()
 
         }
@@ -108,27 +112,30 @@ fun Presentacion() {
 }
 
 @Composable
-fun Registro() {
+fun Registro(goNext: () -> Unit) {
     Column(modifier = Modifier
         .padding(15.dp)
         .fillMaxWidth(1f)){
-        ButtonRegistro()
+        ButtonRegistro(goNext)
     }
 }
 
 @Composable
-fun ButtonRegistro() {
+fun ButtonRegistro(
+    goNext:  () -> Unit = {}
+) {
     Button(modifier = Modifier
         .fillMaxWidth()
         ,
         colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.primary)),
-        onClick = { print("Hello") }) {
+        onClick = { goNext() }) {
         Text(text = stringResource(id = R.string.ingresa))
     }
 }
 
 @Composable
-fun InicioSesion() {
+fun InicioSesion(
+) {
     Row(modifier = Modifier.padding(40.dp)){
         Text(
             text = stringResource(id = R.string.ya_registrado).uppercase(),
@@ -151,8 +158,6 @@ fun InicioSesion() {
                 color = colorResource(id = R.color.primary)
             ),
             modifier = Modifier.padding(2.dp)
-
-
         )
     }
 }

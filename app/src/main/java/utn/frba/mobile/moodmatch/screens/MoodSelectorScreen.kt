@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
-import utn.frba.mobile.moodmatch.common.BottomNavigationBar
 import utn.frba.mobile.moodmatch.common.Header
 import utn.frba.mobile.moodmatch.common.Mood
 import utn.frba.mobile.moodmatch.common.PurpleButton
@@ -38,10 +37,7 @@ import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MoodSelectorScreen() {
-    Scaffold(
-        bottomBar = {
-            BottomNavigationBar() // Llamamos a la función que contiene nuestra barra de navegación
-        } ){
+    Scaffold{
         Column(
             modifier = Modifier
                 .fillMaxSize()

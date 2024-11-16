@@ -189,55 +189,6 @@ fun RecommendationCard(recommendation: Recommendation) {
     }
 }
 
-
-@Composable
-fun BottomNavigationBar() {
-    NavigationBar(
-        containerColor = Color.Transparent,
-        contentColor = Color.Gray
-    ) {
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painterResource(
-                        id = R.drawable.ic_home
-                    ),
-                    contentDescription = stringResource(R.string.home),
-                    modifier = Modifier.size(20.dp)
-                )
-            },
-            selected = true,
-            onClick = { /* Acción Home */ },
-            label = { Text(text = stringResource(id = R.string.home)) }
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painterResource(id = R.drawable.ic_mood),
-                    contentDescription = stringResource(id = R.string.mood),
-                    modifier = Modifier.size(45.dp),
-                    tint = Color.Unspecified
-                )
-            },
-            selected = false,
-            onClick = { /* Acción Mood */ },
-            label = { Text(text = stringResource(id = R.string.mood)) }
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painterResource(id = R.drawable.ic_community),
-                    contentDescription = stringResource(R.string.comunity_esp),
-                    modifier = Modifier.size(20.dp)
-                )
-            },
-            selected = false,
-            onClick = { /* Acción Comunidad */ },
-            label = { Text(text = stringResource(id = R.string.comunity_esp)) }
-        )
-    }
-}
-
 //TODO: pasar funcion como parametro? para el onClick
 @Composable
 fun PurpleButton(text: String) {

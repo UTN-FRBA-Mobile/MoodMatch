@@ -5,27 +5,32 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
+import utn.frba.mobile.moodmatch.R
 
 sealed interface MoodMatchDestination {
-    val icon: ImageVector
+    val icon: Int
     val route: String
     val screenName: String
+    val iconSize: Int
 }
 
 data object Home : MoodMatchDestination {
-    override val icon = Icons.Filled.Home
+    override val icon = R.drawable.ic_home
+    override val iconSize = 20
     override val route = "home"
     override val screenName = "Home"
 }
 
 data object MoodSelector : MoodMatchDestination {
-    override val icon = Icons.Filled.Add
+    override val icon = R.drawable.ic_mood
+    override val iconSize = 45
     override val route = "mood_selector"
-    override val screenName = "Mood"
+    override val screenName = ""
 }
 
 data object Comunidad : MoodMatchDestination {
-    override val icon = Icons.Filled.Person
+    override val icon = R.drawable.ic_community
+    override val iconSize = 20
     override val route = "comunidad"
     override val screenName = "Comunidad"
 }

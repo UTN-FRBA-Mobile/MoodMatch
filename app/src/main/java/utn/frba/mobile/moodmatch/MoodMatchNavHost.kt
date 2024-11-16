@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Home
@@ -20,7 +21,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.composable
@@ -75,7 +79,10 @@ fun AppTabsNavGraph() {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                containerColor = Color.Transparent,
+                contentColor = Color.Gray
+            ) {
                 val backStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = backStackEntry?.destination
                 moodMatchBottomRowScreens.forEach { screen ->
@@ -86,8 +93,12 @@ fun AppTabsNavGraph() {
                         label = { Text(screen.screenName) },
                         icon = {
                             Icon(
-                                imageVector = if (screen.route == "home") Icons.Default.Home else Icons.Default.AccountBox,
-                                contentDescription = null
+                                painterResource(
+                                    id = screen.icon
+                                ),
+                                contentDescription = null,
+                                modifier = Modifier.size(screen.iconSize.dp),
+                                tint = Color.Unspecified
                             )
                         },
                         onClick = {

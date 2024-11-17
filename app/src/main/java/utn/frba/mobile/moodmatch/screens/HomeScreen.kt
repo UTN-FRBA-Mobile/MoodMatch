@@ -1,11 +1,14 @@
 package utn.frba.mobile.moodmatch.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -20,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -37,25 +40,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
-import utn.frba.mobile.moodmatch.common.Footer
+import utn.frba.mobile.moodmatch.common.BottomNavigationBar
 import utn.frba.mobile.moodmatch.common.Header
 
 // TODO datos mockeados que deberian llegar del servidor
 var userName = "Cami"
 var profilePicture = R.drawable.user_profile_picture;
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(Backgroud())
-        .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
-    ){
-        Column {
+fun HomeScreen() {
+    Scaffold(
+        bottomBar = {
+            BottomNavigationBar()
+        },  ){
+        Column (modifier = Modifier.background(Backgroud()).padding(16.dp),){
             Header()
             HomeContent()
-            Footer()
-
         }
     }
 }
@@ -69,7 +70,7 @@ fun HomeContent() {
         Spacer(modifier = Modifier.height(10.dp))
         Titles()
         RecommendationButtons()
-        Recomendations()
+        RecomendationSelector()
     }
 }
 
@@ -163,8 +164,8 @@ fun RecommendationButtons() {
                 Image(
                     painter = painterResource(R.drawable.meditaciones),
                     contentDescription = "meditaciones",
-                    modifier = Modifier
-                        .size(345.dp,90.dp),
+                    //modifier = Modifier
+                    //    .size(360.dp,90.dp),
                     contentScale = ContentScale.Crop
                 )
                 Spacer(modifier = Modifier.height(10.dp))
@@ -173,8 +174,8 @@ fun RecommendationButtons() {
     }
 
 @Composable
-fun Recomendations() {
-    Box(modifier = Modifier.fillMaxWidth(),contentAlignment = Alignment.Center) {
+fun RecomendationSelector() {
+    Box(contentAlignment = Alignment.Center,modifier = Modifier.fillMaxWidth()){
         Column() {
             Text(
                 modifier = Modifier,
@@ -182,13 +183,20 @@ fun Recomendations() {
                 fontFamily = FontFamily(
                     Font(R.font.poppins_bold)
                 ),
+
                 style = TextStyle(
                     fontSize = 18.sp,
+                    background = Color.Red
                 ),
             )
             Spacer(modifier = Modifier.height(10.dp))
+
+
             // tarjeta de carrousel
-            Box(modifier = Modifier.background(Color.Red)) {
+            Box(modifier = Modifier.background(Color.Red).padding(10.dp).padding(bottom = 10.dp)
+                .clickable {
+                    //selectedMoodIndex = index
+                }) {
                 Column  (verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.Start
                 ) {
@@ -196,7 +204,8 @@ fun Recomendations() {
                         painter = painterResource(R.drawable.libros),
                         contentDescription = "libros",
                         modifier = Modifier
-                            .weight(1f)
+
+                            .height(110.dp)
                             .aspectRatio(1f),
                         contentScale = ContentScale.Crop
                     )
@@ -211,14 +220,9 @@ fun Recomendations() {
                         fontSize = 10.sp,
                     ),
                 )
-                Row {
-                    Icon(
-                        Icons.Rounded.Star,
-                        contentDescription = "7,5"
-                    )
                     Text(
                         modifier = Modifier,
-                        text = stringResource(id = R.string.recomendaciones),
+                        text = stringResource(id = R.string.todoBorrar2),
                         fontFamily = FontFamily(
                             Font(R.font.poppins_normal)
                         ),
@@ -226,6 +230,23 @@ fun Recomendations() {
                             fontSize = 10.sp,
                         ),
                     )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Rounded.Star,
+                        contentDescription = "7,5",
+                        Modifier.size(15.dp)
+                    )
+                    Text(
+                        modifier = Modifier,
+                        text = stringResource(id = R.string.todoBorrar),
+                        fontFamily = FontFamily(
+                            Font(R.font.poppins_normal)
+                        ),
+                        style = TextStyle(
+                            fontSize = 10.sp,
+                        ),
+                    )
+
                 }
                 }
             }

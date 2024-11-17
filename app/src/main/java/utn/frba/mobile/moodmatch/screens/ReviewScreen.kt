@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
-import utn.frba.mobile.moodmatch.common.BottomNavigationBar
 import utn.frba.mobile.moodmatch.common.Header
 import utn.frba.mobile.moodmatch.common.PurpleButton
 import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
@@ -51,9 +50,7 @@ import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
 @Composable
 fun ReviewScreen(movieTitle:String) {
     //TODO: Seguro necesite mas data (parametros) de la actividad o peli para guardar la review
-    Scaffold(
-        bottomBar = { BottomNavigationBar() }
-    ) {
+    Scaffold() {
         Column(
             modifier = Modifier
                 .fillMaxSize()

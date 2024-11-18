@@ -1,6 +1,6 @@
 package utn.frba.mobile.moodmatch.data.model
 
-data class Serie(
+data class Series(
     val name: String,
     val plataforma: String,
     val classification: String,

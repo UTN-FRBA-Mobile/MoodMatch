@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
-import utn.frba.mobile.moodmatch.common.BottomNavigationBar
 import utn.frba.mobile.moodmatch.common.Header
 import utn.frba.mobile.moodmatch.common.Mood
 import utn.frba.mobile.moodmatch.common.Recommendation
@@ -34,11 +33,8 @@ import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RecommendationScreen() {
-    Scaffold(
-        bottomBar = {
-            BottomNavigationBar() // Llamamos a la función que contiene nuestra barra de navegación
-        } ){
+fun RecommendationScreen(emocion: Mood) {
+    Scaffold{
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -57,7 +53,13 @@ fun RecommendationScreen() {
                 )
 
                 // Emoji y estado de ánimo
-                MoodSection(mood=Mood.NEUTRAL)
+//                MoodSection(mood=Mood.NEUTRAL)
+                //emocion
+                if (emocion != null) {
+                    MoodSection(mood = emocion)
+                } else {
+                    MoodSection(mood = Mood.NEUTRAL)
+                }
 
                 // Recomendaciones
                 RecommendationCarousel(recommendationList)
@@ -105,7 +107,7 @@ fun ActionButtons() {
 @Composable
 fun RecommendationScreenPreview(){
     MoodMatchTheme {
-        RecommendationScreen()
+        RecommendationScreen(emocion = Mood.VERYGOOD)
     }
 }
 

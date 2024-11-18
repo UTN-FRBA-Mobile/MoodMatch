@@ -82,7 +82,7 @@ fun ReviewScreen(movieTitle:String) {
                     Spacer(modifier = Modifier.height(24.dp))
                     ReviewTextBox()
                     Spacer(modifier = Modifier.height(24.dp))
-                    PurpleButton(text = stringResource(R.string.ready_esp))
+                    PurpleButton(text = stringResource(R.string.ready_esp), onClick = null)
                 }
             }
         }

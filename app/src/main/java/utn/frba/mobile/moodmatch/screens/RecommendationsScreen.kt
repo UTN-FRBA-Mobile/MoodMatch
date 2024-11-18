@@ -33,7 +33,7 @@ import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RecommendationScreen() {
+fun RecommendationScreen(emocion: Mood) {
     Scaffold{
             Column(
                 modifier = Modifier
@@ -53,7 +53,13 @@ fun RecommendationScreen() {
                 )
 
                 // Emoji y estado de ánimo
-                MoodSection(mood=Mood.NEUTRAL)
+//                MoodSection(mood=Mood.NEUTRAL)
+                //emocion
+                if (emocion != null) {
+                    MoodSection(mood = emocion)
+                } else {
+                    MoodSection(mood = Mood.NEUTRAL)
+                }
 
                 // Recomendaciones
                 RecommendationCarousel(recommendationList)
@@ -101,7 +107,7 @@ fun ActionButtons() {
 @Composable
 fun RecommendationScreenPreview(){
     MoodMatchTheme {
-        RecommendationScreen()
+        RecommendationScreen(emocion = Mood.VERYGOOD)
     }
 }
 

@@ -135,7 +135,7 @@ fun MoodSelectorSection() {
             }
         }
 
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = stringResource(id = moods[selectedMoodIndex].moodTextResId),
@@ -143,7 +143,7 @@ fun MoodSelectorSection() {
             fontWeight = FontWeight.SemiBold
         )
 
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             moods.forEachIndexed { index, _ ->
                 Box(

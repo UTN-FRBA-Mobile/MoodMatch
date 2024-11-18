@@ -54,6 +54,13 @@ enum class Mood(val emojiResId: Int, val moodTextResId: Int) {
     ANGRY(R.drawable.ic_emoji_angry, R.string.angry_esp)
 }
 
+enum class Recomendations(val moodTextResId: Int) {
+    FILM(R.string.pelicula),
+    BOOK(R.string.libro),
+    ACTIVITY(R.string.actividad),
+    SERIE(R.string.serie)
+}
+
 data class Recommendation(val title: String, val subtitle: String, val image: Int, val score:Float)
 
 @Composable
@@ -70,11 +77,12 @@ fun Backgroud(): Brush {
 }
 
 @Composable
-fun Header() {
+fun Header(modifier: Modifier = Modifier) {
     Box(modifier = Modifier
         .fillMaxWidth()
         .wrapContentHeight()
-        .padding(25.dp),
+        // todo arreglar el padding para home
+        .padding(top = 25.dp, bottom = 0.dp),
         contentAlignment = Alignment.Center)
     {
         Row(modifier = Modifier

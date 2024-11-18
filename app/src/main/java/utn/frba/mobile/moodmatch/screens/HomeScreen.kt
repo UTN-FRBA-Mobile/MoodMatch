@@ -1,6 +1,8 @@
 package utn.frba.mobile.moodmatch.screens
 
 import android.annotation.SuppressLint
+import android.graphics.Color.rgb
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,7 +10,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -18,10 +19,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -42,10 +45,15 @@ import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
 import utn.frba.mobile.moodmatch.common.BottomNavigationBar
 import utn.frba.mobile.moodmatch.common.Header
+import utn.frba.mobile.moodmatch.common.Mood
+import utn.frba.mobile.moodmatch.common.Recomendations
+import java.util.Locale
 
 // TODO datos mockeados que deberian llegar del servidor
 var userName = "Cami"
-var profilePicture = R.drawable.user_profile_picture;
+var profilePicture = R.drawable.user_profile_picture
+var todoBorrar = "Pelicula random"
+var todoBorrar2 = "7.5"
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -54,7 +62,9 @@ fun HomeScreen() {
         bottomBar = {
             BottomNavigationBar()
         },  ){
-        Column (modifier = Modifier.background(Backgroud()).padding(16.dp),){
+        Column (modifier = Modifier
+            .background(Backgroud())
+            .padding(16.dp),){
             Header()
             HomeContent()
         }
@@ -76,7 +86,8 @@ fun HomeContent() {
 
 @Composable
 fun UserGreeting() {
-    Box(modifier = Modifier.height(50.dp),contentAlignment = Alignment.Center) {
+    Box(modifier = Modifier
+        .height(50.dp),contentAlignment = Alignment.Center) {
         Row (modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
@@ -84,7 +95,6 @@ fun UserGreeting() {
                 contentDescription = "ProfilePicture",
                 modifier = Modifier
                     .size(40.dp)
-
                     .clip(CircleShape),
             )
             Spacer(modifier = Modifier.width(10.dp))
@@ -94,14 +104,11 @@ fun UserGreeting() {
                 fontFamily = FontFamily(
                     Font(R.font.poppins_normal)
                 ),
-
                 style = TextStyle(
                     fontSize = 18.sp
-
                 ),
             )
         }
-
     }
 }
 
@@ -164,11 +171,10 @@ fun RecommendationButtons() {
                 Image(
                     painter = painterResource(R.drawable.meditaciones),
                     contentDescription = "meditaciones",
-                    //modifier = Modifier
-                    //    .size(360.dp,90.dp),
+                    modifier = Modifier.size(359.dp,95.dp),
                     contentScale = ContentScale.Crop
                 )
-                Spacer(modifier = Modifier.height(10.dp))
+                //Spacer(modifier = Modifier.height(10.dp))
             }
         }
     }
@@ -183,74 +189,103 @@ fun RecomendationSelector() {
                 fontFamily = FontFamily(
                     Font(R.font.poppins_bold)
                 ),
-
                 style = TextStyle(
-                    fontSize = 18.sp,
-                    background = Color.Red
+                    fontSize = 19.sp,
                 ),
             )
             Spacer(modifier = Modifier.height(10.dp))
 
 
             // tarjeta de carrousel
-            Box(modifier = Modifier.background(Color.Red).padding(10.dp).padding(bottom = 10.dp)
-                .clickable {
-                    //selectedMoodIndex = index
-                }) {
-                Column  (verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.Start
+
+            // Lista de moods
+            val recomendations = listOf(
+                Recomendations.FILM,
+                Recomendations.BOOK,
+                Recomendations.ACTIVITY,
+                Recomendations.SERIE
+            )
+
+            Column() {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Image(
-                        painter = painterResource(R.drawable.libros),
-                        contentDescription = "libros",
-                        modifier = Modifier
+                    itemsIndexed(recomendations) { index, recomendation ->
+                        Box(
+                            modifier = Modifier
 
-                            .height(110.dp)
-                            .aspectRatio(1f),
-                        contentScale = ContentScale.Crop
-                    )
+                                .clip(RoundedCornerShape(20.dp))
+                                .border(BorderStroke(1.dp, Color.White))
+                                .background(Color(color = rgb(240, 248, 255)))
+                                .clickable {
+                                    //selectedMoodIndex = index
+                                    //todo navegar a otra pantalla segun la actividad seleccionada
+                                }
+                                .padding(10.dp)
+                                .padding(bottom = 5.dp)
 
-                Text(
-                    modifier = Modifier,
-                    text = "PELICULA RANDOM",
-                    fontFamily = FontFamily(
-                        Font(R.font.poppins_bold)
-                    ),
-                    style = TextStyle(
-                        fontSize = 10.sp,
-                    ),
-                )
-                    Text(
-                        modifier = Modifier,
-                        text = stringResource(id = R.string.todoBorrar2),
-                        fontFamily = FontFamily(
-                            Font(R.font.poppins_normal)
-                        ),
-                        style = TextStyle(
-                            fontSize = 10.sp,
-                        ),
-                    )
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        Icons.Rounded.Star,
-                        contentDescription = "7,5",
-                        Modifier.size(15.dp)
-                    )
-                    Text(
-                        modifier = Modifier,
-                        text = stringResource(id = R.string.todoBorrar),
-                        fontFamily = FontFamily(
-                            Font(R.font.poppins_normal)
-                        ),
-                        style = TextStyle(
-                            fontSize = 10.sp,
-                        ),
-                    )
+                        ) {
+                            Column(
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.Start
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.libros),
+                                    contentDescription = "libros",
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(20.dp))
+                                        .height(110.dp)
+                                        .aspectRatio(1f)
+                                        .padding(bottom = 5.dp),
+                                    contentScale = ContentScale.Crop
+                                )
 
-                }
+                                Text(
+                                    modifier = Modifier,
+                                    text = stringResource(id = recomendation.moodTextResId).uppercase(
+                                        Locale.getDefault()),
+                                    fontFamily = FontFamily(
+                                        Font(R.font.poppins_bold)
+                                    ),
+                                    style = TextStyle(
+                                        fontSize = 10.sp,
+                                    ),
+                                )
+                                Text(
+                                    modifier = Modifier,
+                                    text = todoBorrar2,
+                                    fontFamily = FontFamily(
+                                        Font(R.font.poppins_normal)
+                                    ),
+                                    style = TextStyle(
+                                        fontSize = 10.sp,
+                                    ),
+                                )
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        Icons.Rounded.Star,
+                                        contentDescription = "7,5",
+                                        Modifier.size(15.dp)
+                                    )
+                                    Text(
+                                        modifier = Modifier,
+                                        text = todoBorrar,
+                                        fontFamily = FontFamily(
+                                            Font(R.font.poppins_normal)
+                                        ),
+                                        style = TextStyle(
+                                            fontSize = 10.sp,
+                                        ),
+                                    )
+
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
+
     }
 }
 

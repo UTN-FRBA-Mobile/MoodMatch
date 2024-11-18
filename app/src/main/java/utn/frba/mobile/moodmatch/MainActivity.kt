@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import utn.frba.mobile.moodmatch.screens.HomeScreen
 import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
 import utn.frba.mobile.moodmatch.screens.SignInScreen
 import utn.frba.mobile.moodmatch.screens.InitialScreen
@@ -47,7 +48,8 @@ fun MoodMatchApp(modifier: Modifier = Modifier) {
     //SignInScreen()
     //RecommendationScreen()
     //MoodSelectorScreen()
-//    ReviewScreen("Lord of War")
+    //ReviewScreen("Lord of War")
+    //HomeScreen
 }
 
 @Composable

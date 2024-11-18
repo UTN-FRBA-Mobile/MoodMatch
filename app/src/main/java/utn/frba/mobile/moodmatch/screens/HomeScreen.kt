@@ -45,7 +45,6 @@ import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
 import utn.frba.mobile.moodmatch.common.BottomNavigationBar
 import utn.frba.mobile.moodmatch.common.Header
-import utn.frba.mobile.moodmatch.common.Mood
 import utn.frba.mobile.moodmatch.common.Recomendations
 import java.util.Locale
 
@@ -115,7 +114,7 @@ fun UserGreeting() {
 @Composable
 fun Titles() {
     Box(modifier = Modifier.fillMaxWidth(),contentAlignment = Alignment.Center) {
-        Column() {
+        Column {
             Text(
                 modifier = Modifier,
                 text = stringResource(id = R.string.home_greeting),
@@ -149,7 +148,7 @@ fun RecommendationButtons() {
             Column (verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row() {
+                Row {
                     Image(
                         painter = painterResource(R.drawable.peliculas),
                         contentDescription = "peliculas",
@@ -182,7 +181,7 @@ fun RecommendationButtons() {
 @Composable
 fun RecomendationSelector() {
     Box(contentAlignment = Alignment.Center,modifier = Modifier.fillMaxWidth()){
-        Column() {
+        Column {
             Text(
                 modifier = Modifier,
                 text = stringResource(id = R.string.recomendaciones),
@@ -206,11 +205,11 @@ fun RecomendationSelector() {
                 Recomendations.SERIE
             )
 
-            Column() {
+            Column {
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    itemsIndexed(recomendations) { index, recomendation ->
+                    itemsIndexed(recomendations) { _, recomendation ->
                         Box(
                             modifier = Modifier
 

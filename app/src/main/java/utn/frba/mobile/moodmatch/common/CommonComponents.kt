@@ -81,8 +81,7 @@ fun Header(modifier: Modifier = Modifier) {
     Box(modifier = Modifier
         .fillMaxWidth()
         .wrapContentHeight()
-        // todo arreglar el padding para home
-        .padding(top = 25.dp, bottom = 0.dp),
+        .padding(25.dp),
         contentAlignment = Alignment.Center)
     {
         Row(modifier = Modifier

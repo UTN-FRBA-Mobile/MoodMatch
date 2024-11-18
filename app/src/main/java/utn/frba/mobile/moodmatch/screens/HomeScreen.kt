@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
@@ -34,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -44,7 +47,6 @@ import androidx.compose.ui.unit.sp
 import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
 import utn.frba.mobile.moodmatch.common.BottomNavigationBar
-import utn.frba.mobile.moodmatch.common.Header
 import utn.frba.mobile.moodmatch.common.Recomendations
 import java.util.Locale
 
@@ -53,6 +55,61 @@ var userName = "Cami"
 var profilePicture = R.drawable.user_profile_picture
 var todoBorrar = "Pelicula random"
 var todoBorrar2 = "7.5"
+
+//todo usar el de commons pero pisando el padding
+@Composable
+fun Header() {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentHeight()
+        // todo arreglar el padding para home
+        .padding(top = 25.dp, bottom = 0.dp),
+        contentAlignment = Alignment.Center)
+    {
+        Row(modifier = Modifier
+            .wrapContentWidth( align = Alignment.CenterHorizontally),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(3.dp)
+                    .alignByBaseline(),
+                text = stringResource(id = R.string.mood),
+                fontFamily = FontFamily(
+                    Font(R.font.poppins_bold)
+                ),
+                style = TextStyle(
+                    fontSize = 14.sp,
+                ),
+
+                )
+            Image(
+                painter = painterResource(id = R.drawable.logo_mm),
+                contentDescription = "Logo",
+                modifier = Modifier
+                    .size(30.dp)
+                    .background(
+                        colorResource(id = R.color.fondo_logo),
+                        shape = RoundedCornerShape(10.dp)
+                    ),
+            )
+            Text( modifier = Modifier
+                .padding(3.dp)
+                .alignByBaseline(),
+                text = stringResource(id = R.string.match),
+                fontFamily = FontFamily(
+                    Font(R.font.poppins_normal)
+                ),
+                style = TextStyle(
+                    fontSize = 14.sp,
+                ),
+            )
+
+        }
+
+    }
+}
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

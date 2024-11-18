@@ -191,23 +191,25 @@ fun RecommendationCard(recommendation: Recommendation) {
 
 //TODO: pasar funcion como parametro? para el onClick
 @Composable
-fun PurpleButton(text: String) {
-    Button(
-        onClick = { /* Acción de selección */ },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 48.dp)
-            .height(50.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF7B61FF),
-            contentColor = Color.White
-        ),
-        shape = RoundedCornerShape(24.dp)
-    ) {
-        Text(
-            text = text,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
-        )
+fun PurpleButton(text: String, onClick: (() -> Unit)? ) {
+    if (onClick != null) {
+        Button(
+            onClick = onClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 48.dp)
+                .height(50.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF7B61FF),
+                contentColor = Color.White
+            ),
+            shape = RoundedCornerShape(24.dp)
+        ) {
+            Text(
+                text = text,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }

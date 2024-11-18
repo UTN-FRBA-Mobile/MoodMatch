@@ -47,7 +47,7 @@ fun MoodMatchApp(modifier: Modifier = Modifier) {
     //SignInScreen()
     //RecommendationScreen()
     //MoodSelectorScreen()
-    ReviewScreen("Lord of War")
+//    ReviewScreen("Lord of War")
 }
 
 @Composable

@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
@@ -36,7 +37,20 @@ import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MoodSelectorScreen() {
+fun MoodSelectorScreen(navController: NavHostController) {
+    // Lista de moods
+    val moods = listOf(
+        Mood.ANGRY,
+        Mood.SAD,
+        Mood.NEUTRAL,
+        Mood.VERYGOOD,
+        Mood.INCREDIBLE
+    )
+
+    var selectedMoodIndex by remember { mutableStateOf(1) }
+    val listState = rememberLazyListState()
+
+
     Scaffold{
         Column(
             modifier = Modifier
@@ -48,9 +62,69 @@ fun MoodSelectorScreen() {
             Spacer(modifier = Modifier.height(50.dp))
             HeaderSection()
             Spacer(modifier = Modifier.height(32.dp))
-            MoodSelectorSection()
+
+            // Centrar el elemento seleccionado cuando cambia `selectedMoodIndex`
+            LaunchedEffect(selectedMoodIndex) {
+                launch {
+                    listState.animateScrollToItem(
+                        selectedMoodIndex,
+                        // Compensar para centrar el elemento seleccionado
+                        scrollOffset = -listState.layoutInfo.viewportEndOffset / 4
+                    )
+                }
+            }
+
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                LazyRow(
+                    state = listState,
+                    horizontalArrangement = Arrangement.spacedBy(24.dp),
+                    contentPadding = PaddingValues(horizontal = 64.dp)
+                ) {
+                    itemsIndexed(moods) { index, mood ->
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .size(if (index == selectedMoodIndex) 80.dp else 64.dp)
+                                .background(Color(0xFFFFF0E5), shape = CircleShape)
+                                .clickable {
+                                    selectedMoodIndex = index
+                                }
+                                .padding(8.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(id = mood.emojiResId),
+                                contentDescription = stringResource(id = mood.moodTextResId),
+                                modifier = Modifier.size(if (index == selectedMoodIndex) 60.dp else 40.dp)
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = stringResource(id = moods[selectedMoodIndex].moodTextResId),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    moods.forEachIndexed { index, _ ->
+                        Box(
+                            modifier = Modifier
+                                .size(if (index == selectedMoodIndex) 8.dp else 6.dp)
+                                .background(
+                                    if (index == selectedMoodIndex) Color.Gray else Color.LightGray,
+                                    shape = CircleShape
+                                )
+                        )
+                    }
+                }
+            }
+            var emocion = moods[selectedMoodIndex]
             Spacer(modifier = Modifier.height(32.dp))
-            PurpleButton(stringResource(R.string.select_esp))
+            PurpleButton(stringResource(R.string.select_esp), onClick = { navController.navigate("recomendacion/$emocion") })
         }
     }
 }
@@ -80,85 +154,10 @@ fun HeaderSection() {
     }
 }
 
-@Composable
-fun MoodSelectorSection() {
-    // Lista de moods
-    val moods = listOf(
-        Mood.ANGRY,
-        Mood.SAD,
-        Mood.NEUTRAL,
-        Mood.VERYGOOD,
-        Mood.INCREDIBLE
-    )
-
-    var selectedMoodIndex by remember { mutableStateOf(1) }
-    val listState = rememberLazyListState()
-
-    // Centrar el elemento seleccionado cuando cambia `selectedMoodIndex`
-    LaunchedEffect(selectedMoodIndex) {
-        launch {
-            listState.animateScrollToItem(
-                selectedMoodIndex,
-                // Compensar para centrar el elemento seleccionado
-                scrollOffset = -listState.layoutInfo.viewportEndOffset / 4
-            )
-        }
-    }
-
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        LazyRow(
-            state = listState,
-            horizontalArrangement = Arrangement.spacedBy(24.dp),
-            contentPadding = PaddingValues(horizontal = 64.dp)
-        ) {
-            itemsIndexed(moods) { index, mood ->
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .size(if (index == selectedMoodIndex) 80.dp else 64.dp)
-                        .background(Color(0xFFFFF0E5), shape = CircleShape)
-                        .clickable {
-                            selectedMoodIndex = index
-                        }
-                        .padding(8.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = mood.emojiResId),
-                        contentDescription = stringResource(id = mood.moodTextResId),
-                        modifier = Modifier.size(if (index == selectedMoodIndex) 60.dp else 40.dp)
-                    )
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = stringResource(id = moods[selectedMoodIndex].moodTextResId),
-            fontSize = 16.sp,
-            fontWeight = FontWeight.SemiBold
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            moods.forEachIndexed { index, _ ->
-                Box(
-                    modifier = Modifier
-                        .size(if (index == selectedMoodIndex) 8.dp else 6.dp)
-                        .background(
-                            if (index == selectedMoodIndex) Color.Gray else Color.LightGray,
-                            shape = CircleShape
-                        )
-                )
-            }
-        }
-    }
-}
-
-@Preview
-@Composable
-fun MoodSelectorPreview(){
-    MoodMatchTheme {
-        MoodSelectorScreen()
-    }
-}
+//@Preview
+//@Composable
+//fun MoodSelectorPreview(){
+//    MoodMatchTheme {
+//        MoodSelectorScreen()
+//    }
+//}

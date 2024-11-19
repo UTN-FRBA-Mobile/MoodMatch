@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.composable
@@ -25,12 +26,15 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import utn.frba.mobile.moodmatch.common.Mood
 import utn.frba.mobile.moodmatch.navigator.moodMatchBottomRowScreens
+import utn.frba.mobile.moodmatch.repository.UserRepositoryImp
 import utn.frba.mobile.moodmatch.screens.CommunityScreen
 import utn.frba.mobile.moodmatch.screens.HomeScreen
 import utn.frba.mobile.moodmatch.screens.InitialScreen
 import utn.frba.mobile.moodmatch.screens.SignInScreen
 import utn.frba.mobile.moodmatch.screens.MoodSelectorScreen
 import utn.frba.mobile.moodmatch.screens.RecommendationScreen
+import utn.frba.mobile.moodmatch.screens.viewmodel.SignInScreenViewModel
+import utn.frba.mobile.moodmatch.screens.viewmodel.SignInViewModelFactory
 
 @Composable
 fun MoodMatchNavHost(
@@ -54,8 +58,11 @@ fun MoodMatchNavHost(
                 )
             }
             composable("sign_in"){
-                val viewModel = it.sharedViewModel<SampleViewModel>(navController)
+                val userRepository = UserRepositoryImp()
+                val viewModel: SignInScreenViewModel = viewModel(factory = SignInViewModelFactory(userRepository))
+
                 SignInScreen(
+                    viewModel = viewModel,
                     goNext = { navController.navigateSingleTopTo("app") }
                 )
             }

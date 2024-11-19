@@ -1,6 +1,7 @@
 package utn.frba.mobile.moodmatch
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
@@ -12,8 +13,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import utn.frba.mobile.moodmatch.common.Mood
 import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModel
 import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
+import java.util.logging.Logger
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,11 +38,6 @@ fun MoodMatchApp(modifier: Modifier = Modifier) {
         navController = navController,
         modifier = modifier
     )
-    val viewModel = MainViewModel()
-    viewModel.getRecommendations("series", "deportivo")
-    viewModel.getRecommendations("movies", "deportivo")
-    viewModel.getRecommendations("books", "deportivo")
-    viewModel.getRecommendations("activity", "deportivo")
     //InitialScreen("Android")
     //SignInScreen()
     //RecommendationScreen()

@@ -30,4 +30,17 @@
     <string name="ready_esp">Listo</string>
     <string name="leave_your_review_here_esp">Escribe tu reseña aquí...</string>
 
+    <string name="hola">Hola</string>
+    <string name="peliculas">Películas</string>
+    <string name="libros">Libros</string>
+    <string name="meditaciones">Meditaciones</string>
+    <string name="pelicula">Película</string>
+    <string name="libro">libro</string>
+    <string name="actividad">Actividad</string>
+    <string name="serie">Serie</string>
+    <string name="comunidad">comunidad</string>
+    <string name="home_greeting">Esperamos que MoodMatch pueda ayudarte hoy</string>
+    <string name="esperamos_ayudarte">Esperamos que MoodMatch pueda ayudarte hoy</string>
+    <string name="recomendaciones">Recomendaciones según tus vistas</string>
+    <string name="elegi_recomendacion">Elegí la recomendación que haga match con vos</string>
 </resources>

@@ -54,6 +54,13 @@ enum class Mood(val emojiResId: Int, val moodTextResId: Int) {
     ANGRY(R.drawable.ic_emoji_angry, R.string.angry_esp)
 }
 
+enum class Recomendations(val moodTextResId: Int) {
+    FILM(R.string.pelicula),
+    BOOK(R.string.libro),
+    ACTIVITY(R.string.actividad),
+    SERIE(R.string.serie)
+}
+
 data class Recommendation(val title: String, val subtitle: String, val image: Int, val score:Float)
 
 @Composable

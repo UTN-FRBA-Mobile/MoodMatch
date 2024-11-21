@@ -6,5 +6,6 @@ data class Series(
     val classification: String,
     val image: String,
     val sinopsis: String,
-    val score: Double
+    val score: Double,
+    val director: String
 )

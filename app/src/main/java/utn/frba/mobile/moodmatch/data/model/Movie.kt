@@ -1,11 +1,11 @@
 package utn.frba.mobile.moodmatch.data.model
 
 data class Movie(
-    val name: String,
+    override val name: String,
     val plataforma: String,
-    val classification: String,
-    val image: String,
-    val sinopsis: String,
+    override val classification: String,
+    override val image: String,
+    override val sinopsis: String,
     val score: Double,
     val director: String,
-)
+):Enterteinment

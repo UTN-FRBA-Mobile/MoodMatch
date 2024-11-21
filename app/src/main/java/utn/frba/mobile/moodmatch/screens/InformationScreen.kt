@@ -43,11 +43,16 @@ import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
 import utn.frba.mobile.moodmatch.common.Mood
 import utn.frba.mobile.moodmatch.common.PurpleButton
+import utn.frba.mobile.moodmatch.data.model.Activity
+import utn.frba.mobile.moodmatch.data.model.Book
+import utn.frba.mobile.moodmatch.data.model.Enterteinment
+import utn.frba.mobile.moodmatch.data.model.Movie
+import utn.frba.mobile.moodmatch.data.model.Series
 import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun InformationScreen(emocion: String) {
+fun InformationScreen( someThing : Enterteinment) {
     Scaffold{
         val state = rememberScrollState()
         Column(
@@ -71,9 +76,17 @@ fun InformationScreen(emocion: String) {
             Spacer(modifier = Modifier.height(20.dp))
             GeneralInformation("Lord of War","Accion","Tarantino")
             Spacer(modifier = Modifier.height(20.dp))
-            Sinopsis("Ambientada en la Tercera Edad de La Tierra Media, mundo inventado por J.R.R. Tolkien. Narra una gran aventura: el viaje emprendido por 9 compañeros para destruir un Anillo lleno de poder maléfico. Su argumento es complejo y se narra con la participación de varios protagonistas que se mueven en varios hilos narrativos. Es una obra coral en la que destacan unos pocos protagonistas (Frodo, Sam, Gandalf y Aragorn).")
-            Platform(List(2,{i->"Netflix"}))
-            Score("7.2")
+            Sinopsis(someThing.sinopsis)
+            when (someThing){
+                is Movie -> Platform(someThing.plataforma)
+                is Series -> Platform(someThing.plataforma)
+            }
+            when (someThing){
+                is Movie -> Score(someThing.score.toString())
+                is Book -> Score(someThing.score.toString())
+                is Series -> Score(someThing.score.toString())
+            }
+
             Spacer(modifier = Modifier.height(20.dp))
             PurpleButton(text = "Ver ahora", onClick = { ->"10" })
             Spacer(modifier = Modifier.height(15.dp))
@@ -107,7 +120,7 @@ fun Score(puntuacion:String){
 }
 
 @Composable
-fun Platform(plataformas:List<String>){
+fun Platform(plataforma:String){
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -220,6 +233,6 @@ fun Sinopsis(sinopsis:String){
 @Composable
 fun InformationScreenPreview() {
     MoodMatchTheme {
-        InformationScreen("Lord Of War")
+        InformationScreen(Movie("Lord of War","Netflix","Accion","Alguna","Ambientada en la Tercera Edad de La Tierra Media, mundo inventado por J.R.R. Tolkien. Narra una gran aventura: el viaje emprendido por 9 compañeros para destruir un Anillo lleno de poder maléfico. Su argumento es complejo y se narra con la participación de varios protagonistas que se mueven en varios hilos narrativos. Es una obra coral en la que destacan unos pocos protagonistas (Frodo, Sam, Gandalf y Aragorn).",9.72,"Tarantino"))
     }
 }

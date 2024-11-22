@@ -61,6 +61,12 @@ enum class Recomendations(val moodTextResId: Int) {
     SERIE(R.string.serie)
 }
 
+enum class Platform() {
+    NETFLIX(),
+    PRIME(),
+    HBO()
+}
+
 data class Recommendation(val title: String, val subtitle: String, val image: Int, val score:Float)
 
 @Composable

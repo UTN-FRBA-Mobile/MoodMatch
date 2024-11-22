@@ -1,8 +1,10 @@
 package utn.frba.mobile.moodmatch.data.model
 
+import utn.frba.mobile.moodmatch.common.Platform
+
 data class Movie(
     override val name: String,
-    val plataforma: String,
+    val plataforma: Platform,
     override val classification: String,
     override val image: String,
     override val sinopsis: String,

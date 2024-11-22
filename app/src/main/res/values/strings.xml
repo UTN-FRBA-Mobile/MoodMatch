@@ -43,4 +43,10 @@
     <string name="esperamos_ayudarte">Esperamos que MoodMatch pueda ayudarte hoy</string>
     <string name="recomendaciones">Recomendaciones según tus vistas</string>
     <string name="elegi_recomendacion">Elegí la recomendación que haga match con vos</string>
+    <string name="ver_ahora">Ver ahora</string>
+    <string name="titulo">Titulo</string>
+    <string name="genero">Genero</string>
+    <string name="director">Director</string>
+    <string name="autor">Autor</string>
+    <string name="clasificacion">Clasificacion</string>
 </resources>

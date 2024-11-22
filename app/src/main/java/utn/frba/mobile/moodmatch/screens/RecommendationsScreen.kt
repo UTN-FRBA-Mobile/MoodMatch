@@ -1,6 +1,7 @@
 package utn.frba.mobile.moodmatch.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -11,10 +12,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -27,13 +31,21 @@ import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
 import utn.frba.mobile.moodmatch.common.Header
 import utn.frba.mobile.moodmatch.common.Mood
-import utn.frba.mobile.moodmatch.common.Recommendation
 import utn.frba.mobile.moodmatch.common.RecommendationCarousel
+import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModel
 import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RecommendationScreen(emocion: Mood) {
+fun RecommendationScreen(emocion: Mood, viewModel: MainViewModel = MainViewModel()) {
+    // Lanzamos la llamada a la API en un efecto
+    LaunchedEffect(emocion) {
+        viewModel.getRecommendations(emocion)
+    }
+
+    val recommendations by viewModel.recommendations
+    val isLoading by viewModel.isLoading
+    Log.d("RecommendationsScreen", "Recommendations fetched: $recommendations")
     Scaffold{
             Column(
                 modifier = Modifier
@@ -49,20 +61,29 @@ fun RecommendationScreen(emocion: Mood) {
                     text = stringResource(R.string.recommendation_screen_greet_esp),
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(8.dp)
                 )
 
-                // Emoji y estado de ánimo
-//                MoodSection(mood=Mood.NEUTRAL)
-                //emocion
                 if (emocion != null) {
                     MoodSection(mood = emocion)
                 } else {
                     MoodSection(mood = Mood.NEUTRAL)
                 }
 
-                // Recomendaciones
-                RecommendationCarousel(recommendationList)
+                // Mostrar cargador si está cargando
+                if (isLoading) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                } else {
+                    // Mostrar RecommendationsCarousel si hay datos
+                    if (recommendations.isNotEmpty()) {
+                        RecommendationCarousel(recommendationList = recommendations)
+                    } else {
+                        Text(
+                            "No recommendations available.",
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                    }
+                }
 
                 // Botones de acciones
                 ActionButtons()
@@ -111,11 +132,4 @@ fun RecommendationScreenPreview(){
     }
 }
 
-// Datos de ejemplo
-// TODO: Tomar datos de API
-val recommendationList = listOf(
-    Recommendation("PELÍCULA", "El señor de la guerra", R.drawable.lord_of_war, 8.0F),
-    Recommendation("SERIE", "Westworld", R.drawable.westworld, 7.5F),
-    // Añade más recomendaciones aquí
-)
 

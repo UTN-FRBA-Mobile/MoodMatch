@@ -22,9 +22,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -43,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import utn.frba.mobile.moodmatch.R
 
 //Esto va aca?
@@ -67,7 +65,9 @@ enum class Platform() {
     HBO()
 }
 
-data class Recommendation(val title: String, val subtitle: String, val image: Int, val score:Float)
+data class Recommendation(
+    val title: String, val subtitle: String, val image: String, val score:Float,val type:String
+)
 
 @Composable
 fun Backgroud(): Brush {
@@ -87,7 +87,7 @@ fun Header() {
     Box(modifier = Modifier
         .fillMaxWidth()
         .wrapContentHeight()
-        .padding(25.dp),
+        .padding(20.dp),
         contentAlignment = Alignment.Center)
     {
         Row(modifier = Modifier
@@ -136,7 +136,7 @@ fun Header() {
 }
 
 @Composable
-fun RecommendationCarousel(recommendationList: List<Recommendation> ) {
+fun RecommendationCarousel(recommendationList: List<Recommendation>) {
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
@@ -154,7 +154,7 @@ fun RecommendationCard(recommendation: Recommendation) {
     Card(
         modifier = Modifier
             .width(200.dp)
-            .height(210.dp)
+            .height(200.dp)
             .clickable { /* Acción al hacer clic en la tarjeta */ },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
@@ -168,9 +168,9 @@ fun RecommendationCard(recommendation: Recommendation) {
             modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(id = recommendation.image),
-                contentDescription = null,
+            AsyncImage(
+                model = recommendation.image,
+                contentDescription = "imagen descriptiva",
                 modifier = Modifier
                     .height(100.dp)
                     .fillMaxWidth(),
@@ -202,7 +202,7 @@ fun RecommendationCard(recommendation: Recommendation) {
     }
 }
 
-//TODO: pasar funcion como parametro? para el onClick
+
 @Composable
 fun PurpleButton(text: String, onClick: (() -> Unit)? ) {
     if (onClick != null) {

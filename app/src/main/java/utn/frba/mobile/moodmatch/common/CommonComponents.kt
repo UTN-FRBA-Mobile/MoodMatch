@@ -42,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import utn.frba.mobile.moodmatch.R
 
@@ -138,6 +139,7 @@ fun Header() {
 }
 
 @Composable
+fun RecommendationCarousel(recommendationList: List<Recommendation> ,navController: NavController) {
 fun RecommendationCarousel(recommendationList: List<Recommendation>) {
     LazyRow(
         modifier = Modifier
@@ -152,8 +154,10 @@ fun RecommendationCarousel(recommendationList: List<Recommendation>) {
 }
 
 @Composable
-fun RecommendationCard(recommendation: Recommendation) {
+fun RecommendationCard(recommendation: Recommendation, navController: NavController) {
+    var title = recommendation.title
     Card(
+        onClick = {navController.navigate("information/$title")},
         modifier = Modifier
             .width(200.dp)
             .height(200.dp)

@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
 import utn.frba.mobile.moodmatch.common.Header
@@ -37,6 +38,7 @@ import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
+fun RecommendationScreen(emocion: Mood,navController: NavController) {
 fun RecommendationScreen(emocion: Mood, viewModel: MainViewModel = MainViewModel()) {
     // Lanzamos la llamada a la API en un efecto
     LaunchedEffect(emocion) {
@@ -84,6 +86,8 @@ fun RecommendationScreen(emocion: Mood, viewModel: MainViewModel = MainViewModel
                         )
                     }
                 }
+                // Recomendaciones
+                RecommendationCarousel(recommendationList,navController)
 
                 // Botones de acciones
                 ActionButtons()
@@ -124,7 +128,7 @@ fun ActionButtons() {
     }
 }
 
-@Preview
+/*@Preview
 @Composable
 fun RecommendationScreenPreview(){
     MoodMatchTheme {

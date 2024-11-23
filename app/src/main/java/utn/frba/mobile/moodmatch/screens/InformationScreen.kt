@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
 import utn.frba.mobile.moodmatch.common.Mood
@@ -57,6 +58,7 @@ import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun InformationScreen( someThing : Enterteinment) {
+    val navController = rememberNavController()
     Scaffold{
         val state = rememberScrollState()
         Column(

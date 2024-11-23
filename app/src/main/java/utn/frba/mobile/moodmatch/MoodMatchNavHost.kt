@@ -36,6 +36,8 @@ import utn.frba.mobile.moodmatch.screens.InitialScreen
 import utn.frba.mobile.moodmatch.screens.MoodSelectorScreen
 import utn.frba.mobile.moodmatch.screens.RecommendationScreen
 import utn.frba.mobile.moodmatch.screens.SignInScreen
+import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModel
+import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModelFactory
 import utn.frba.mobile.moodmatch.screens.viewmodel.SignInScreenViewModel
 import utn.frba.mobile.moodmatch.screens.viewmodel.SignInViewModelFactory
 
@@ -78,7 +80,7 @@ fun MoodMatchNavHost(
 
 @Composable
 fun AppTabsNavGraph() {
-
+    val viewModel: MainViewModel = viewModel(factory = MainViewModelFactory())
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
@@ -159,7 +161,10 @@ fun AppTabsNavGraph() {
                     } catch (e: IllegalArgumentException) {
                         Mood.NEUTRAL
                     }
-                    RecommendationScreen(emocion = emocion, navController =  navController)
+                    RecommendationScreen(
+                        emocion = emocion,
+                        viewModel = viewModel,
+                        navController = navController)
                 }
                 composable(
                     route = "information/{tipo}",
@@ -172,8 +177,15 @@ fun AppTabsNavGraph() {
                     val tipo = backStackEntry.arguments?.getString("tipo")
 
                     InformationScreen(
-                        Movie("Lord of War",
-                            Platform.PRIME,"Accion","Alguna","Ambientada en la Tercera Edad de La Tierra Media, mundo inventado por J.R.R. Tolkien. Narra una gran aventura: el viaje emprendido por 9 compañeros para destruir un Anillo lleno de poder maléfico. Su argumento es complejo y se narra con la participación de varios protagonistas que se mueven en varios hilos narrativos. Es una obra coral en la que destacan unos pocos protagonistas (Frodo, Sam, Gandalf y Aragorn).",9.72,"Tarantino")
+                        navController = navController,
+                        viewModel = viewModel,
+                        someThing =
+                            Movie("Lord of War",
+                                Platform.PRIME,"Accion",
+                                "Alguna",
+                                "Ambientada en la Tercera Edad de La Tierra Media, mundo inventado por J.R.R. Tolkien. Narra una gran aventura: el viaje emprendido por 9 compañeros para destruir un Anillo lleno de poder maléfico. Su argumento es complejo y se narra con la participación de varios protagonistas que se mueven en varios hilos narrativos. Es una obra coral en la que destacan unos pocos protagonistas (Frodo, Sam, Gandalf y Aragorn).",
+                                9.72,
+                                "Tarantino")
                     )
                 }
             }

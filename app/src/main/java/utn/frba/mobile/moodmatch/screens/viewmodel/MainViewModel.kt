@@ -2,7 +2,9 @@ package utn.frba.mobile.moodmatch.screens.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
@@ -12,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import utn.frba.mobile.moodmatch.common.Mood
+import utn.frba.mobile.moodmatch.common.Platform
 import utn.frba.mobile.moodmatch.common.Recommendation
 import utn.frba.mobile.moodmatch.data.model.Activity
 import utn.frba.mobile.moodmatch.data.model.Book
@@ -27,6 +30,9 @@ class MainViewModel() : ViewModel() {
 
     private val _recommendations = MutableStateFlow<List<Recommendation>>(emptyList())
     val recommendations: StateFlow<List<Recommendation>> = _recommendations.asStateFlow()
+
+    var selectedRecommendation by mutableStateOf<Recommendation?>(null)
+        private set
 
     // Usamos suspend fun para esperar la llamada de la API
     suspend fun getRecommendations(mood: Mood) {
@@ -48,7 +54,7 @@ class MainViewModel() : ViewModel() {
     // Función para parsear el Map<String, Any> a una lista de Recommendation
     private fun parseRecommendations(response: Map<String, Any>): List<Recommendation> {
         val recommendations = mutableListOf<Recommendation>()
-
+        Log.d("MainViewModel", "Recommendations to parse: $response")
         response.forEach { (key, value) ->
             when (key) {
                 "books" -> {
@@ -60,7 +66,9 @@ class MainViewModel() : ViewModel() {
                                 creator = book.autor,
                                 image = book.image,
                                 type = "Book",
-                                score = book.score.toFloat()
+                                score = book.score.toFloat(),
+                                platform = Platform.NA,
+                                sinopsis = book.sinopsis
                             )
                         )
                     }
@@ -74,7 +82,9 @@ class MainViewModel() : ViewModel() {
                                 creator = movie.director,
                                 image = movie.image,
                                 type = "Movie",
-                                score =  movie.score.toFloat()
+                                score =  movie.score.toFloat(),
+                                sinopsis = movie.sinopsis,
+                                platform = movie.plataforma ?: Platform.NA
                             )
                         )
                     }
@@ -88,7 +98,9 @@ class MainViewModel() : ViewModel() {
                                 creator = series.director,
                                 image = series.image,
                                 type = "Series",
-                                score = series.score.toFloat()
+                                score = series.score.toFloat(),
+                                sinopsis = series.sinopsis,
+                                platform = series.plataforma ?: Platform.NA
                             )
                         )
                     }
@@ -99,10 +111,12 @@ class MainViewModel() : ViewModel() {
                         recommendations.add(
                             Recommendation(
                                 title = activity.name,
-                                creator = activity.sinopsis,
+                                creator = activity.classification,
                                 image = activity.image,
                                 type = "Activity",
-                                score = 7.0F
+                                score = 7.0F,
+                                sinopsis = activity.sinopsis,
+                                platform = Platform.NA
                             )
                         )
                     }
@@ -116,6 +130,9 @@ class MainViewModel() : ViewModel() {
         return recommendations
     }
 
+    fun setRecommendation(recommendation: Recommendation) {
+        selectedRecommendation = recommendation
+    }
 
     fun getSeries(): List<Series> {
         var result: List<Series> = emptyList()

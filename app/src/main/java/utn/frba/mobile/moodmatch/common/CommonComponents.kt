@@ -1,5 +1,6 @@
 package utn.frba.mobile.moodmatch.common
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import utn.frba.mobile.moodmatch.R
+import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModel
 
 //Esto va aca?
 enum class Mood(val emojiResId: Int, val moodTextResId: Int) {
@@ -65,7 +67,8 @@ enum class Recomendations(val moodTextResId: Int) {
 enum class Platform() {
     NETFLIX(),
     PRIME(),
-    HBO()
+    HBO(),
+    NA() // No aplica
 }
 
 data class Recommendation(
@@ -73,7 +76,9 @@ data class Recommendation(
     val creator: String,
     val image: String,
     val score:Float,
-    val type:String
+    val type:String,
+    val sinopsis:String,
+    val platform: Platform
 )
 
 @Composable
@@ -143,7 +148,11 @@ fun Header() {
 }
 
 @Composable
-fun RecommendationCarousel(recommendationList: List<Recommendation> ,navController: NavController) {
+fun RecommendationCarousel(
+    recommendationList: List<Recommendation> ,
+    navController: NavController,
+    viewModel: MainViewModel
+    ) {
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
@@ -151,20 +160,34 @@ fun RecommendationCarousel(recommendationList: List<Recommendation> ,navControll
         horizontalArrangement = Arrangement.spacedBy(16.dp) // Espacio entre tarjetas
     ) {
         items(recommendationList) { recommendation ->
-            RecommendationCard(recommendation, navController = navController)
+            RecommendationCard(
+                recommendation = recommendation,
+                navController = navController,
+                viewModel = viewModel)
         }
     }
 }
 
 @Composable
-fun RecommendationCard(recommendation: Recommendation, navController: NavController) {
+fun RecommendationCard(
+    recommendation: Recommendation,
+    navController: NavController,
+    viewModel: MainViewModel
+) {
     var title = recommendation.title
     Card(
-        onClick = {navController.navigate("information/$title")},
+        onClick = {
+            // Guarda la recomendación en el ViewModel
+            viewModel.setRecommendation(recommendation)
+            val title = viewModel.selectedRecommendation?.title
+            Log.d("RecCard", "Recomendation: $title")
+
+            // Navega a la pantalla de información
+            navController.navigate("information/$title")},
         modifier = Modifier
             .width(200.dp)
             .height(200.dp)
-            .clickable { /* Acción al hacer clic en la tarjeta */ },
+            .clickable {},
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White // Color de fondo de la tarjeta

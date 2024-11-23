@@ -27,7 +27,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
@@ -35,14 +34,13 @@ import utn.frba.mobile.moodmatch.common.Header
 import utn.frba.mobile.moodmatch.common.Mood
 import utn.frba.mobile.moodmatch.common.RecommendationCarousel
 import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModel
-import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModelFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun RecommendationScreen(
     emocion: Mood,
     navController: NavController,
-    viewModel: MainViewModel =  viewModel(factory = MainViewModelFactory())
+    viewModel: MainViewModel
 ) {
     val recommendations by viewModel.recommendations.collectAsState()
     val isLoading by viewModel.isLoading
@@ -53,7 +51,6 @@ fun RecommendationScreen(
     }
 
     Log.d("RecommendationsScreen", "Recommendations fetched: $recommendations")
-    Log.d("RecommendationsScreen", " Mood: $emocion")
 
     Scaffold{
             Column(
@@ -85,7 +82,11 @@ fun RecommendationScreen(
                 } else {
                     // Mostrar RecommendationsCarousel si hay datos
                     if (recommendations.isNotEmpty()) {
-                        RecommendationCarousel(recommendationList = recommendations, navController)
+                        RecommendationCarousel(
+                            recommendationList = recommendations,
+                            navController = navController,
+                            viewModel = viewModel
+                            )
                     } else {
                         Text(
                             "No recommendations available.",

@@ -1,9 +1,9 @@
 package utn.frba.mobile.moodmatch.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Scaffold
@@ -38,14 +36,12 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
 import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
-import utn.frba.mobile.moodmatch.common.Mood
 import utn.frba.mobile.moodmatch.common.Platform
 import utn.frba.mobile.moodmatch.common.PurpleButton
 import utn.frba.mobile.moodmatch.data.model.Activity
@@ -53,12 +49,21 @@ import utn.frba.mobile.moodmatch.data.model.Book
 import utn.frba.mobile.moodmatch.data.model.Enterteinment
 import utn.frba.mobile.moodmatch.data.model.Movie
 import utn.frba.mobile.moodmatch.data.model.Series
-import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
+import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun InformationScreen( someThing : Enterteinment) {
-    val navController = rememberNavController()
+fun InformationScreen(
+    someThing : Enterteinment,
+    navController: NavController,
+    viewModel: MainViewModel
+) {
+
+    //val navController = rememberNavController()
+    val recommendation = viewModel.selectedRecommendation
+
+    Log.d("InformationScreen", " recommendation: $recommendation")
+
     Scaffold{
         val state = rememberScrollState()
         Column(
@@ -247,10 +252,10 @@ fun Sinopsis(sinopsis:String){
     }
 }
 
-@Preview
+/*@Preview
 @Composable
 fun InformationScreenPreview() {
     MoodMatchTheme {
         InformationScreen(Movie("Lord of War",Platform.PRIME,"Accion","Alguna","Ambientada en la Tercera Edad de La Tierra Media, mundo inventado por J.R.R. Tolkien. Narra una gran aventura: el viaje emprendido por 9 compañeros para destruir un Anillo lleno de poder maléfico. Su argumento es complejo y se narra con la participación de varios protagonistas que se mueven en varios hilos narrativos. Es una obra coral en la que destacan unos pocos protagonistas (Frodo, Sam, Gandalf y Aragorn).",9.72,"Tarantino"))
     }
-}
+}*/

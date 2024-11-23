@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
 import utn.frba.mobile.moodmatch.common.Platform
@@ -76,14 +77,19 @@ fun InformationScreen(
             // Header con imagen de perfil, logo y ícono de menú
             Header()
             Spacer(modifier = Modifier.height(10.dp))
-            Image(
-                painter = painterResource(id = R.drawable.lord_of_war),
-                contentDescription = "Lord of War",
-                contentScale = ContentScale.FillWidth,
+            AsyncImage(
+                model = someThing.image,
+                contentDescription = "imagen descriptiva",
+                modifier = Modifier
+                    .height(100.dp)
+                    .fillMaxWidth(),
+                contentScale = ContentScale.Fit
+            )
+                /*contentScale = ContentScale.FillWidth,
                 modifier = Modifier.height(200.dp)
                         .width(200.dp)
-                //modifier = Modifier.fillMaxWidth()
-            )
+                //modifier = Modifier.fillMaxWidth()*/
+
             Spacer(modifier = Modifier.height(20.dp))
             GeneralInformation(someThing)
             Spacer(modifier = Modifier.height(20.dp))
@@ -158,7 +164,7 @@ fun Platform(plataforma:Platform){
                         .clip(RoundedCornerShape(16.dp))
                 )
             }
-            if(plataforma == Platform.PRIME) {
+            if(plataforma == Platform.PRIME || plataforma == Platform.NA) {
                 Image(
                     painter = painterResource(id = R.drawable.prime_video),
                     contentDescription = "Netflix",

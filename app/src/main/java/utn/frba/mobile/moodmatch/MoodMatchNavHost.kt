@@ -1,5 +1,6 @@
 package utn.frba.mobile.moodmatch
 
+import android.R.attr.type
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -26,6 +27,8 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import utn.frba.mobile.moodmatch.common.Mood
 import utn.frba.mobile.moodmatch.common.Platform
+import utn.frba.mobile.moodmatch.data.model.Activity
+import utn.frba.mobile.moodmatch.data.model.Book
 import utn.frba.mobile.moodmatch.data.model.Movie
 import utn.frba.mobile.moodmatch.navigator.moodMatchBottomRowScreens
 import utn.frba.mobile.moodmatch.repository.UserRepositoryImp
@@ -40,6 +43,7 @@ import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModel
 import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModelFactory
 import utn.frba.mobile.moodmatch.screens.viewmodel.SignInScreenViewModel
 import utn.frba.mobile.moodmatch.screens.viewmodel.SignInViewModelFactory
+
 
 @Composable
 fun MoodMatchNavHost(
@@ -173,20 +177,46 @@ fun AppTabsNavGraph() {
                             type = NavType.StringType
                         }
                     )
-                ) { backStackEntry ->
-                    val tipo = backStackEntry.arguments?.getString("tipo")
-
-                    InformationScreen(
-                        navController = navController,
-                        viewModel = viewModel,
-                        someThing =
-                            Movie("Lord of War",
-                                Platform.PRIME,"Accion",
-                                "Alguna",
-                                "Ambientada en la Tercera Edad de La Tierra Media, mundo inventado por J.R.R. Tolkien. Narra una gran aventura: el viaje emprendido por 9 compañeros para destruir un Anillo lleno de poder maléfico. Su argumento es complejo y se narra con la participación de varios protagonistas que se mueven en varios hilos narrativos. Es una obra coral en la que destacan unos pocos protagonistas (Frodo, Sam, Gandalf y Aragorn).",
-                                9.72,
-                                "Tarantino")
-                    )
+                ) {
+                    val recommendation = viewModel.selectedRecommendation
+                    if (recommendation != null) {
+                        if (recommendation.type=="Movie"||recommendation.type=="Series"){
+                            InformationScreen(
+                                navController = navController,
+                                viewModel = viewModel,
+                                someThing =
+                                Movie(recommendation.title,
+                                    recommendation.platform,
+                                    recommendation.type,
+                                    recommendation.image,
+                                    recommendation.sinopsis,
+                                    recommendation.score.toDouble(),
+                                    recommendation.creator)
+                            )
+                        }else if (recommendation.type=="Book"){
+                            InformationScreen(
+                                navController = navController,
+                                viewModel = viewModel,
+                                someThing =
+                                Book(recommendation.title,
+                                    recommendation.creator,
+                                    recommendation.type,
+                                    recommendation.image,
+                                    recommendation.sinopsis,
+                                    recommendation.score.toDouble())
+                            )
+                        } else{
+                            InformationScreen(
+                                navController = navController,
+                                viewModel = viewModel,
+                                someThing =
+                                Activity(recommendation.title,
+                                    recommendation.type,
+                                    recommendation.image,
+                                    recommendation.sinopsis)
+                            )
+                        }
+                    }
                 }
             }
 

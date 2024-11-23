@@ -2,29 +2,28 @@ package utn.frba.mobile.moodmatch
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import kotlinx.serialization.Serializable
 import utn.frba.mobile.moodmatch.common.Mood
 import utn.frba.mobile.moodmatch.common.Platform
 import utn.frba.mobile.moodmatch.data.model.Movie
@@ -34,9 +33,9 @@ import utn.frba.mobile.moodmatch.screens.CommunityScreen
 import utn.frba.mobile.moodmatch.screens.HomeScreen
 import utn.frba.mobile.moodmatch.screens.InformationScreen
 import utn.frba.mobile.moodmatch.screens.InitialScreen
-import utn.frba.mobile.moodmatch.screens.SignInScreen
 import utn.frba.mobile.moodmatch.screens.MoodSelectorScreen
 import utn.frba.mobile.moodmatch.screens.RecommendationScreen
+import utn.frba.mobile.moodmatch.screens.SignInScreen
 import utn.frba.mobile.moodmatch.screens.viewmodel.SignInScreenViewModel
 import utn.frba.mobile.moodmatch.screens.viewmodel.SignInViewModelFactory
 
@@ -160,7 +159,7 @@ fun AppTabsNavGraph() {
                     } catch (e: IllegalArgumentException) {
                         Mood.NEUTRAL
                     }
-                    RecommendationScreen(emocion = emocion,navController)
+                    RecommendationScreen(emocion = emocion, navController =  navController)
                 }
                 composable(
                     route = "information/{tipo}",

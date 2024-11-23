@@ -18,15 +18,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
@@ -34,20 +35,26 @@ import utn.frba.mobile.moodmatch.common.Header
 import utn.frba.mobile.moodmatch.common.Mood
 import utn.frba.mobile.moodmatch.common.RecommendationCarousel
 import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModel
-import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
+import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModelFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RecommendationScreen(emocion: Mood,navController: NavController) {
-fun RecommendationScreen(emocion: Mood, viewModel: MainViewModel = MainViewModel()) {
+fun RecommendationScreen(
+    emocion: Mood,
+    navController: NavController,
+    viewModel: MainViewModel =  viewModel(factory = MainViewModelFactory())
+) {
+    val recommendations by viewModel.recommendations.collectAsState()
+    val isLoading by viewModel.isLoading
+
     // Lanzamos la llamada a la API en un efecto
     LaunchedEffect(emocion) {
         viewModel.getRecommendations(emocion)
     }
 
-    val recommendations by viewModel.recommendations
-    val isLoading by viewModel.isLoading
     Log.d("RecommendationsScreen", "Recommendations fetched: $recommendations")
+    Log.d("RecommendationsScreen", " Mood: $emocion")
+
     Scaffold{
             Column(
                 modifier = Modifier
@@ -78,7 +85,7 @@ fun RecommendationScreen(emocion: Mood, viewModel: MainViewModel = MainViewModel
                 } else {
                     // Mostrar RecommendationsCarousel si hay datos
                     if (recommendations.isNotEmpty()) {
-                        RecommendationCarousel(recommendationList = recommendations)
+                        RecommendationCarousel(recommendationList = recommendations, navController)
                     } else {
                         Text(
                             "No recommendations available.",
@@ -86,9 +93,6 @@ fun RecommendationScreen(emocion: Mood, viewModel: MainViewModel = MainViewModel
                         )
                     }
                 }
-                // Recomendaciones
-                RecommendationCarousel(recommendationList,navController)
-
                 // Botones de acciones
                 ActionButtons()
             }
@@ -127,13 +131,3 @@ fun ActionButtons() {
         }
     }
 }
-
-/*@Preview
-@Composable
-fun RecommendationScreenPreview(){
-    MoodMatchTheme {
-        RecommendationScreen(emocion = Mood.VERYGOOD)
-    }
-}
-
-

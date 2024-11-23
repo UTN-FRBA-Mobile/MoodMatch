@@ -69,7 +69,11 @@ enum class Platform() {
 }
 
 data class Recommendation(
-    val title: String, val subtitle: String, val image: String, val score:Float,val type:String
+    val title: String,
+    val creator: String,
+    val image: String,
+    val score:Float,
+    val type:String
 )
 
 @Composable
@@ -140,7 +144,6 @@ fun Header() {
 
 @Composable
 fun RecommendationCarousel(recommendationList: List<Recommendation> ,navController: NavController) {
-fun RecommendationCarousel(recommendationList: List<Recommendation>) {
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
@@ -148,7 +151,7 @@ fun RecommendationCarousel(recommendationList: List<Recommendation>) {
         horizontalArrangement = Arrangement.spacedBy(16.dp) // Espacio entre tarjetas
     ) {
         items(recommendationList) { recommendation ->
-            RecommendationCard(recommendation)
+            RecommendationCard(recommendation, navController = navController)
         }
     }
 }
@@ -192,7 +195,7 @@ fun RecommendationCard(recommendation: Recommendation, navController: NavControl
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = recommendation.subtitle,
+                text = recommendation.creator,
                 textAlign = TextAlign.Center,
                 color = Color.Gray
             )

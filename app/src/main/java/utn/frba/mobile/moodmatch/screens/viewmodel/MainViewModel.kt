@@ -7,6 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import utn.frba.mobile.moodmatch.common.Mood
 import utn.frba.mobile.moodmatch.common.Recommendation
@@ -16,14 +19,14 @@ import utn.frba.mobile.moodmatch.data.model.Movie
 import utn.frba.mobile.moodmatch.data.model.Series
 import utn.frba.mobile.moodmatch.repository.APIMoodMatchRepository
 
-class MainViewModel : ViewModel() {
+class MainViewModel() : ViewModel() {
     private val repository = APIMoodMatchRepository()
 
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> get() = _isLoading
 
-    private val _recommendations = mutableStateOf<List<Recommendation>>(emptyList())
-    val recommendations: State<List<Recommendation>> get() = _recommendations
+    private val _recommendations = MutableStateFlow<List<Recommendation>>(emptyList())
+    val recommendations: StateFlow<List<Recommendation>> = _recommendations.asStateFlow()
 
     // Usamos suspend fun para esperar la llamada de la API
     suspend fun getRecommendations(mood: Mood) {
@@ -54,7 +57,7 @@ class MainViewModel : ViewModel() {
                         recommendations.add(
                             Recommendation(
                                 title = book.name,
-                                subtitle = book.autor,
+                                creator = book.autor,
                                 image = book.image,
                                 type = "Book",
                                 score = book.score.toFloat()
@@ -68,7 +71,7 @@ class MainViewModel : ViewModel() {
                         recommendations.add(
                             Recommendation(
                                 title = movie.name,
-                                subtitle = movie.director,
+                                creator = movie.director,
                                 image = movie.image,
                                 type = "Movie",
                                 score =  movie.score.toFloat()
@@ -82,7 +85,7 @@ class MainViewModel : ViewModel() {
                         recommendations.add(
                             Recommendation(
                                 title = series.name,
-                                subtitle = series.director,
+                                creator = series.director,
                                 image = series.image,
                                 type = "Series",
                                 score = series.score.toFloat()
@@ -96,7 +99,7 @@ class MainViewModel : ViewModel() {
                         recommendations.add(
                             Recommendation(
                                 title = activity.name,
-                                subtitle = activity.sinopsis,
+                                creator = activity.sinopsis,
                                 image = activity.image,
                                 type = "Activity",
                                 score = 7.0F

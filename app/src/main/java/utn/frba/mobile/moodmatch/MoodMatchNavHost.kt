@@ -1,6 +1,7 @@
 package utn.frba.mobile.moodmatch
 
 import android.R.attr.type
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -29,10 +30,12 @@ import utn.frba.mobile.moodmatch.common.Mood
 import utn.frba.mobile.moodmatch.common.Platform
 import utn.frba.mobile.moodmatch.data.model.Activity
 import utn.frba.mobile.moodmatch.data.model.Book
+import utn.frba.mobile.moodmatch.data.model.Enterteinment
 import utn.frba.mobile.moodmatch.data.model.Movie
 import utn.frba.mobile.moodmatch.navigator.moodMatchBottomRowScreens
 import utn.frba.mobile.moodmatch.repository.UserRepositoryImp
 import utn.frba.mobile.moodmatch.screens.CommunityScreen
+import utn.frba.mobile.moodmatch.screens.ContentListScreen
 import utn.frba.mobile.moodmatch.screens.HomeScreen
 import utn.frba.mobile.moodmatch.screens.InformationScreen
 import utn.frba.mobile.moodmatch.screens.InitialScreen
@@ -143,7 +146,10 @@ fun AppTabsNavGraph() {
         ) {
             navigation(startDestination = "home", route = "app") {
             composable("home") {
-                HomeScreen()
+                HomeScreen(
+                    viewModel = viewModel,
+                    navController = navController
+                )
             }
 
         }
@@ -223,9 +229,33 @@ fun AppTabsNavGraph() {
             composable("comunidad") {
                 CommunityScreen()
             }
+            composable(
+                route = "contentList/{tipo}",
+                arguments = listOf(
+                    navArgument(name = "tipo"){
+                        type = NavType.StringType
+                    }
+                )
+            ) { backStackEntry ->
+                var recommendationList: List<Enterteinment> = listOf()
+                val type = backStackEntry.arguments?.getString("tipo");
+                
+                if(type.equals("books") || type.equals("movies")) {
+                if(type.equals("books")) {
+                    recommendationList = viewModel.getBooks()
+                    Log.d("3 NAV HOST", recommendationList.toString())
+                } else if(type.equals("moovies")) {
+                    recommendationList = viewModel.getMovies()
+                } 
+                ContentListScreen(
+                    recommendationList = recommendationList
+                ) 
+                }
+                if (type.equals("meditations")) {
+                    Text(text = "Pantalla en construccion")
+                }
+            }
         }
-
-
     }
 }
 

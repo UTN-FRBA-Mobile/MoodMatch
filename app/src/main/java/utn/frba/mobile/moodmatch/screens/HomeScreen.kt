@@ -53,6 +53,7 @@ import coil.compose.AsyncImage
 import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
 import utn.frba.mobile.moodmatch.common.Recommendation
+import utn.frba.mobile.moodmatch.common.getTypeName
 import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModel
 import java.util.Locale
 
@@ -70,15 +71,14 @@ fun HomeScreen(
     val recommendations by viewModel.recommendations.collectAsState()
     //val userData by viewmodel.login.collectAsState()
     val isLoading by viewModel.isLoading
-    
-    Log.d("HomeScreen", "Recommendations fetched: $recommendations")
 
     Scaffold(bottomBar = {}){
         Column (
             modifier = Modifier
                 .fillMaxSize()
                 .background(Backgroud())
-                .padding(16.dp),){
+                .padding(16.dp)
+        ){
             Header()
             UserGreeting()
             Spacer(modifier = Modifier.height(10.dp))
@@ -247,7 +247,6 @@ fun RecommendationCard(
                 .clickable {
                     viewModel.setRecommendation(recommendation)
                     val title = viewModel.selectedRecommendation?.title
-                    Log.d("RecCard", "Recomendation: $title")
                     navController.navigate("information/$title")
                 }
                 .padding(10.dp)
@@ -295,17 +294,6 @@ fun RecommendationCard(
                 }
             }
         }
-    }
-}
-
-@Composable
-fun getTypeName(type: String): String {
-    return when (type.lowercase(Locale.getDefault())) {
-        "book" -> stringResource(id = R.string.libro)
-        "movie" -> stringResource(id = R.string.pelicula)
-        "series" -> stringResource(id = R.string.serie)
-        "activity" -> stringResource(id = R.string.actividad)
-        else -> "Unknown Type"
     }
 }
 

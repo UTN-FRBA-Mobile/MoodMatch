@@ -47,28 +47,35 @@ import utn.frba.mobile.moodmatch.common.PurpleButton
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MoodSelectorScreen(navController: NavHostController) {
+    // Agregar moods invisibles para manejar los extremos
     val moods = listOf(
+        Mood.InvisibleStart,
         Mood.ANGRY,
         Mood.SAD,
         Mood.NEUTRAL,
         Mood.VERYGOOD,
-        Mood.INCREDIBLE
+        Mood.INCREDIBLE,
+        Mood.InvisibleEnd
     )
 
-    var selectedMoodIndex by remember { mutableStateOf(2) } // Inicialmente centrado en "Neutral"
+    var selectedMoodIndex by remember { mutableStateOf(3) } // Inicialmente centrado en "Neutral"
     val listState = rememberLazyListState()
 
     // Detectar el elemento más cercano al centro después de scrollear
     LaunchedEffect(listState.isScrollInProgress) {
         if (!listState.isScrollInProgress) {
-            val center = listState.layoutInfo.viewportStartOffset + listState.layoutInfo.viewportEndOffset / 2
+            val viewportStart = listState.layoutInfo.viewportStartOffset
+            val viewportEnd = listState.layoutInfo.viewportEndOffset
+            val center = (viewportEnd - viewportStart) / 2 + viewportStart
+
             val closestItem = listState.layoutInfo.visibleItemsInfo.minByOrNull {
-                kotlin.math.abs(it.offset + it.size / 2 - center)
+                kotlin.math.abs((it.offset + it.size / 2) - center)
             }
+
             closestItem?.let {
-                if (it.index != selectedMoodIndex) {
-                    selectedMoodIndex = it.index
-                    // Usar una corrutina para centrar automáticamente
+                val adjustedIndex = it.index.coerceIn(1, moods.size - 2) // Ignorar moods invisibles
+                if (adjustedIndex != selectedMoodIndex) {
+                    selectedMoodIndex = adjustedIndex
                     launch {
                         listState.animateScrollToItem(it.index)
                     }
@@ -77,8 +84,8 @@ fun MoodSelectorScreen(navController: NavHostController) {
         }
     }
 
-    // Usar `LaunchedEffect` para manejar el scroll al seleccionar un mood
-    LaunchedEffect(selectedMoodIndex) {
+    // Asegurarnos de centrar el elemento inicial seleccionado
+    LaunchedEffect(Unit) {
         listState.animateScrollToItem(selectedMoodIndex)
     }
 
@@ -99,7 +106,7 @@ fun MoodSelectorScreen(navController: NavHostController) {
                 moods = moods,
                 selectedMoodIndex = selectedMoodIndex,
                 onMoodSelected = { index ->
-                    selectedMoodIndex = index // Actualizar el índice seleccionado
+                    selectedMoodIndex = index.coerceIn(1, moods.size - 2) // Evitar seleccionar invisibles
                 },
                 listState = listState
             )
@@ -115,7 +122,6 @@ fun MoodSelectorScreen(navController: NavHostController) {
     }
 }
 
-
 @Composable
 fun MoodCarousel(
     moods: List<Mood>,
@@ -123,7 +129,6 @@ fun MoodCarousel(
     onMoodSelected: (Int) -> Unit,
     listState: LazyListState
 ) {
-    // Ajustes de diseño
     val itemSize = 80.dp
     val itemSpacing = 32.dp
     val paddingHorizontal = (itemSize + itemSpacing) / 2
@@ -136,22 +141,27 @@ fun MoodCarousel(
         itemsIndexed(moods) { index, mood ->
             val isSelected = index == selectedMoodIndex
 
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .size(if (isSelected) 100.dp else 80.dp)
-                    .background(
-                        color = if (isSelected) Color(0xFFFFE0B2) else Color(0xFFFFF0E5),
-                        shape = CircleShape
+            if (mood.name == "InvisibleStart" || mood.name == "InvisibleEnd") {
+                // Ítems invisibles para los extremos
+                Spacer(modifier = Modifier.size(itemSize))
+            } else {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(if (isSelected) 100.dp else 80.dp)
+                        .background(
+                            color = if (isSelected) Color(0xFFFFE0B2) else Color(0xFFFFF0E5),
+                            shape = CircleShape
+                        )
+                        .padding(8.dp)
+                        .clickable { onMoodSelected(index) }
+                ) {
+                    Image(
+                        painter = painterResource(id = mood.emojiResId),
+                        contentDescription = stringResource(id = mood.moodTextResId),
+                        modifier = Modifier.size(if (isSelected) 60.dp else 48.dp)
                     )
-                    .padding(8.dp)
-                    .clickable { onMoodSelected(index) }
-            ) {
-                Image(
-                    painter = painterResource(id = mood.emojiResId),
-                    contentDescription = stringResource(id = mood.moodTextResId),
-                    modifier = Modifier.size(if (isSelected) 60.dp else 48.dp)
-                )
+                }
             }
         }
     }
@@ -169,12 +179,12 @@ fun MoodCarousel(
         Spacer(modifier = Modifier.height(8.dp))
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            moods.forEachIndexed { index, _ ->
+            moods.subList(1, moods.size - 1).forEachIndexed { index, _ -> // Ignorar moods invisibles
                 Box(
                     modifier = Modifier
-                        .size(if (index == selectedMoodIndex) 10.dp else 6.dp)
+                        .size(if (index + 1 == selectedMoodIndex) 10.dp else 6.dp)
                         .background(
-                            if (index == selectedMoodIndex) Color.Gray else Color.LightGray,
+                            if (index + 1 == selectedMoodIndex) Color.Gray else Color.LightGray,
                             shape = CircleShape
                         )
                 )

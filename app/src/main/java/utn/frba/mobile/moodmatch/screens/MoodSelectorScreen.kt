@@ -130,7 +130,7 @@ fun MoodCarousel(
 ) {
     val itemSize = 80.dp
     val itemSpacing = 32.dp
-    val paddingHorizontal = (itemSize + itemSpacing) / 6F
+    val paddingHorizontal = (itemSize + itemSpacing) / 15F
 
     LazyRow(
         state = listState,

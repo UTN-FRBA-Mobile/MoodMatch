@@ -4,7 +4,18 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -23,7 +34,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -33,29 +43,57 @@ import utn.frba.mobile.moodmatch.common.Backgroud
 import utn.frba.mobile.moodmatch.common.Header
 import utn.frba.mobile.moodmatch.common.Mood
 import utn.frba.mobile.moodmatch.common.PurpleButton
-import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MoodSelectorScreen(navController: NavHostController) {
-    // Lista de moods
+    // Agregar moods invisibles para manejar los extremos
     val moods = listOf(
+        Mood.InvisibleStart,
         Mood.ANGRY,
         Mood.SAD,
         Mood.NEUTRAL,
         Mood.VERYGOOD,
-        Mood.INCREDIBLE
+        Mood.INCREDIBLE,
+        Mood.InvisibleEnd
     )
 
-    var selectedMoodIndex by remember { mutableStateOf(1) }
+    var selectedMoodIndex by remember { mutableStateOf(3) } // Inicialmente centrado en "Neutral"
     val listState = rememberLazyListState()
 
+    // Detectar el elemento más cercano al centro después de scrollear
+    LaunchedEffect(listState.isScrollInProgress) {
+        if (!listState.isScrollInProgress) {
+            val viewportStart = listState.layoutInfo.viewportStartOffset
+            val viewportEnd = listState.layoutInfo.viewportEndOffset
+            val center = (viewportEnd - viewportStart) / 2 + viewportStart
 
-    Scaffold{
+            val closestItem = listState.layoutInfo.visibleItemsInfo.minByOrNull {
+                kotlin.math.abs((it.offset + it.size / 2) - center)
+            }
+
+            closestItem?.let {
+                val adjustedIndex = it.index.coerceIn(1, moods.size - 2) // Ignorar moods invisibles
+                if (adjustedIndex != selectedMoodIndex) {
+                    selectedMoodIndex = adjustedIndex
+                    launch {
+                        listState.animateScrollToItem(it.index)
+                    }
+                }
+            }
+        }
+    }
+
+    // Asegurarnos de centrar el elemento inicial seleccionado
+    LaunchedEffect(Unit) {
+        listState.animateScrollToItem(selectedMoodIndex)
+    }
+
+    Scaffold {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Backgroud()), // Cambia este color según tu fondo
+                .background(Backgroud()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Header()
@@ -63,68 +101,94 @@ fun MoodSelectorScreen(navController: NavHostController) {
             HeaderSection()
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Centrar el elemento seleccionado cuando cambia `selectedMoodIndex`
-            LaunchedEffect(selectedMoodIndex) {
-                launch {
-                    listState.animateScrollToItem(
-                        selectedMoodIndex,
-                        // Compensar para centrar el elemento seleccionado
-                        scrollOffset = -listState.layoutInfo.viewportEndOffset / 4
+            // Carrusel de emociones
+            MoodCarousel(
+                moods = moods,
+                selectedMoodIndex = selectedMoodIndex,
+                onMoodSelected = { index ->
+                    selectedMoodIndex = index.coerceIn(1, moods.size - 2) // Evitar seleccionar invisibles
+                },
+                listState = listState
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Botón de navegación
+            PurpleButton(
+                text = stringResource(R.string.select_esp),
+                onClick = { navController.navigate("recomendacion/${moods[selectedMoodIndex]}") }
+            )
+        }
+    }
+}
+
+@Composable
+fun MoodCarousel(
+    moods: List<Mood>,
+    selectedMoodIndex: Int,
+    onMoodSelected: (Int) -> Unit,
+    listState: LazyListState
+) {
+    val itemSize = 80.dp
+    val itemSpacing = 32.dp
+    val paddingHorizontal = (itemSize + itemSpacing) / 2
+
+    LazyRow(
+        state = listState,
+        horizontalArrangement = Arrangement.spacedBy(itemSpacing),
+        contentPadding = PaddingValues(horizontal = paddingHorizontal)
+    ) {
+        itemsIndexed(moods) { index, mood ->
+            val isSelected = index == selectedMoodIndex
+
+            if (mood.name == "InvisibleStart" || mood.name == "InvisibleEnd") {
+                // Ítems invisibles para los extremos
+                Spacer(modifier = Modifier.size(itemSize))
+            } else {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(if (isSelected) 100.dp else 80.dp)
+                        .background(
+                            color = if (isSelected) Color(0xFFFFE0B2) else Color(0xFFFFF0E5),
+                            shape = CircleShape
+                        )
+                        .padding(8.dp)
+                        .clickable { onMoodSelected(index) }
+                ) {
+                    Image(
+                        painter = painterResource(id = mood.emojiResId),
+                        contentDescription = stringResource(id = mood.moodTextResId),
+                        modifier = Modifier.size(if (isSelected) 60.dp else 48.dp)
                     )
                 }
             }
+        }
+    }
 
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                LazyRow(
-                    state = listState,
-                    horizontalArrangement = Arrangement.spacedBy(24.dp),
-                    contentPadding = PaddingValues(horizontal = 64.dp)
-                ) {
-                    itemsIndexed(moods) { index, mood ->
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .size(if (index == selectedMoodIndex) 80.dp else 64.dp)
-                                .background(Color(0xFFFFF0E5), shape = CircleShape)
-                                .clickable {
-                                    selectedMoodIndex = index
-                                }
-                                .padding(8.dp)
-                        ) {
-                            Image(
-                                painter = painterResource(id = mood.emojiResId),
-                                contentDescription = stringResource(id = mood.moodTextResId),
-                                modifier = Modifier.size(if (index == selectedMoodIndex) 60.dp else 40.dp)
-                            )
-                        }
-                    }
-                }
+    Spacer(modifier = Modifier.height(16.dp))
 
-                Spacer(modifier = Modifier.height(8.dp))
+    // Texto y puntos indicadores
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = stringResource(id = moods[selectedMoodIndex].moodTextResId),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold
+        )
 
-                Text(
-                    text = stringResource(id = moods[selectedMoodIndex].moodTextResId),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
+        Spacer(modifier = Modifier.height(8.dp))
 
-                Spacer(modifier = Modifier.height(16.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    moods.forEachIndexed { index, _ ->
-                        Box(
-                            modifier = Modifier
-                                .size(if (index == selectedMoodIndex) 8.dp else 6.dp)
-                                .background(
-                                    if (index == selectedMoodIndex) Color.Gray else Color.LightGray,
-                                    shape = CircleShape
-                                )
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            moods.subList(1, moods.size - 1).forEachIndexed { index, _ -> // Ignorar moods invisibles
+                Box(
+                    modifier = Modifier
+                        .size(if (index + 1 == selectedMoodIndex) 10.dp else 6.dp)
+                        .background(
+                            if (index + 1 == selectedMoodIndex) Color.Gray else Color.LightGray,
+                            shape = CircleShape
                         )
-                    }
-                }
+                )
             }
-            var emocion = moods[selectedMoodIndex]
-            Spacer(modifier = Modifier.height(32.dp))
-            PurpleButton(stringResource(R.string.select_esp), onClick = { navController.navigate("recomendacion/$emocion") })
         }
     }
 }

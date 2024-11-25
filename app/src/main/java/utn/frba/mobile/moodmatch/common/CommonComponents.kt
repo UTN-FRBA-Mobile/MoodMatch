@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -50,6 +51,8 @@ import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModel
 
 //Esto va aca?
 enum class Mood(val emojiResId: Int, val moodTextResId: Int) {
+    InvisibleStart(R.drawable.ic_placeholder, R.string.empty_string),
+    InvisibleEnd(R.drawable.ic_placeholder, R.string.empty_string),
     NEUTRAL(R.drawable.ic_emoji_neutral, R.string.neutral_esp),
     VERYGOOD(R.drawable.ic_emoji_verygood, R.string.verygood_esp),
     SAD(R.drawable.ic_emoji_sad, R.string.sad_esp),
@@ -179,7 +182,6 @@ fun RecommendationCard(
             navController.navigate("information/$title")},
         modifier = Modifier
             .width(200.dp)
-            .height(200.dp)
             .clickable {},
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(

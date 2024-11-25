@@ -125,8 +125,8 @@ fun launchApp(context: Context,platform: Platform){
     when(platform){
         Platform.NETFLIX -> launchNetflix(context,"81630891")
         Platform.HBO -> launchHboApp(context,"f0a4f239-0b57-47e2-a39a-54fb96925e61")
-        Platform.PRIME -> launchPrimeApp(context,"0TISNLNDTS29PHKMC3DUWISVLC")
-        else -> launchHboApp(context,"f0a4f239-0b57-47e2-a39a-54fb96925e61")
+        Platform.PRIME -> launchPrimeApp(context,"amzn1.dv.gti.f2a9f680-2275-2949-77fd-e67f07b680f0")
+        else -> launchPrimeApp(context,"amzn1.dv.gti.f2a9f680-2275-2949-77fd-e67f07b680f0")
     }
 }
 
@@ -134,7 +134,7 @@ fun launchPrimeApp(context: Context,id: String) {
     val packageName = "com.amazon.avod.thirdpartyclient" // Or the appropriate package name
     val intent = Intent(
         Intent.ACTION_VIEW,
-        Uri.parse("https://www.primevideo.com/detail/$id")
+        Uri.parse("https://app.primevideo.com/detail?gti=$id")
     )
     try {
         context.startActivity(intent)

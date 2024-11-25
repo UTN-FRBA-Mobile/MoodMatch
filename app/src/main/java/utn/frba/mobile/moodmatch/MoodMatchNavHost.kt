@@ -253,7 +253,7 @@ fun AppTabsNavGraph() {
                             creator= b.autor,
                             image= b.image,
                             score= b.score.toFloat(),
-                            type = "books",
+                            type = "Book",
                             sinopsis = b.sinopsis,
                             platform = Platform.NA
                         )
@@ -269,7 +269,7 @@ fun AppTabsNavGraph() {
                             creator= b.director,
                             image= b.image,
                             score= b.score.toFloat(),
-                            type = "movies",
+                            type = "Movie",
                             sinopsis = b.sinopsis,
                             platform = b.plataforma ?: Platform.NA
                         )
@@ -286,7 +286,7 @@ fun AppTabsNavGraph() {
                             creator= "",
                             image= b.image,
                             score= 0f,
-                            type = "activities",
+                            type = "Activity",
                             sinopsis = b.sinopsis,
                             platform = Platform.NA
                         )

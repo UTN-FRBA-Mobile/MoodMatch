@@ -116,30 +116,28 @@ fun AppTabsNavGraph() {
                             )
                         },
                         onClick = {
-                            navController.navigate(screen.route) {
-                                // findStartDestination -> Finds the actual start destination of the graph,
-                                // handling cases where the graph's starting destination is itself a NavGraph(nested navigation)
-
-                                // popUpTo :-  clears the back stack and the state of all
-                                // destinations between the current destination and the NavOptionsBuilder.popUpTo ID
-                                // But if we use saveState = true, it will save that state( back stack and the state of all
-                                // destinations between the current destination and the NavOptionsBuilder.popUpTo ID)
-                                // before it clears backstack entries upto popUpTo ID,
-                                // and later it restore that backstack if we use restoreState = true
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
+                            if (screen.route == "home") {
+                                // Caso específico para Home
+                                navController.navigate("home") {
+                                    popUpTo("home") { inclusive = true }
+                                    launchSingleTop = true
                                 }
-
-                                launchSingleTop = true
-
-                                restoreState = true
-
+                            } else {
+                                // Navegación genérica para las otras pantallas
+                                navController.navigate(screen.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
                             }
                         },
                     )
                 }
             }
         }
+
     ) { innerPadding ->
         NavHost(
             navController = navController,

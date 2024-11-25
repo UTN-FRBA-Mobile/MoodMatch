@@ -31,6 +31,15 @@ class MainViewModel() : ViewModel() {
     private val _recommendations = MutableStateFlow<List<Recommendation>>(emptyList())
     val recommendations: StateFlow<List<Recommendation>> = _recommendations.asStateFlow()
 
+    private val _books = MutableStateFlow<List<Book>>(emptyList())
+    val books: StateFlow<List<Book>> = _books.asStateFlow()
+
+    private val _movies = MutableStateFlow<List<Movie>>(emptyList())
+    val movies: StateFlow<List<Movie>> = _movies.asStateFlow()
+
+    private val _recreationalActivities = MutableStateFlow<List<Activity>>(emptyList())
+    val recreationalActivities: StateFlow<List<Activity>> = _recreationalActivities.asStateFlow()
+
     var selectedRecommendation by mutableStateOf<Recommendation?>(null)
         private set
 
@@ -52,7 +61,7 @@ class MainViewModel() : ViewModel() {
     }
 
     // Función para parsear el Map<String, Any> a una lista de Recommendation
-    private fun parseRecommendations(response: Map<String, Any>): List<Recommendation> {
+    fun parseRecommendations(response: Map<String, Any>): List<Recommendation> {
         val recommendations = mutableListOf<Recommendation>()
         Log.d("MainViewModel", "Recommendations to parse: $response")
         response.forEach { (key, value) ->
@@ -150,47 +159,45 @@ class MainViewModel() : ViewModel() {
 
     }
 
-    fun getMovies(): List<Movie> {
-        var result: List<Movie> = emptyList()
+    suspend fun getMovies() {
         viewModelScope.launch {
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    result = repository.fetchMovies()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+            _isLoading.value = true
+            try {
+                val movies = repository.fetchMovies()
+                _movies.value = movies
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
             }
         }
-
-        return result
     }
 
-    fun getBooks(): List<Book> {
-        var result: List<Book> = emptyList()
+    suspend fun getBooks() {
         viewModelScope.launch {
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    result = repository.fetchBooks()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+            _isLoading.value = true
+            try {
+                val books = repository.fetchBooks()
+                _books.value = books
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
             }
         }
-
-        return result
     }
 
-    fun getRecreationalActivities(): List<Activity> {
-        var result: List<Activity> = emptyList()
+    suspend fun getRecreationalActivities() {
         viewModelScope.launch {
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    result = repository.fetchRecreationalActivities()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+            _isLoading.value = true
+            try {
+                val recreationalActivities = repository.fetchRecreationalActivities()
+                _recreationalActivities.value = recreationalActivities
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
             }
         }
-        return result
     }
 }

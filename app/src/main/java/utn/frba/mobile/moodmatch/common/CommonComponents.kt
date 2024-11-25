@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -57,13 +58,6 @@ enum class Mood(val emojiResId: Int, val moodTextResId: Int) {
     SAD(R.drawable.ic_emoji_sad, R.string.sad_esp),
     INCREDIBLE(R.drawable.ic_emoji_incredible, R.string.incredible_esp),
     ANGRY(R.drawable.ic_emoji_angry, R.string.angry_esp)
-}
-
-enum class Recomendations(val moodTextResId: Int) {
-    FILM(R.string.pelicula),
-    BOOK(R.string.libro),
-    ACTIVITY(R.string.actividad),
-    SERIE(R.string.serie)
 }
 
 enum class Platform() {
@@ -188,7 +182,6 @@ fun RecommendationCard(
             navController.navigate("information/$title")},
         modifier = Modifier
             .width(200.dp)
-            .height(200.dp)
             .clickable {},
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(

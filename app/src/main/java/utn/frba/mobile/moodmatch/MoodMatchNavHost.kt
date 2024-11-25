@@ -195,7 +195,7 @@ fun AppTabsNavGraph() {
                                 someThing =
                                 Movie(recommendation.title,
                                     recommendation.platform,
-                                    recommendation.type,
+                                    "Accion",//recommendation.genero
                                     recommendation.image,
                                     recommendation.sinopsis,
                                     Math.round(recommendation.score* 100.0)/100.toDouble(),
@@ -208,7 +208,7 @@ fun AppTabsNavGraph() {
                                 someThing =
                                 Book(recommendation.title,
                                     recommendation.creator,
-                                    recommendation.type,
+                                    "Ciencia Ficcion",//recommendation.genero
                                     recommendation.image,
                                     recommendation.sinopsis,
                                     Math.round(recommendation.score * 100.0)/100.toDouble())
@@ -219,7 +219,7 @@ fun AppTabsNavGraph() {
                                 viewModel = viewModel,
                                 someThing =
                                 Activity(recommendation.title,
-                                    recommendation.type,
+                                    recommendation.creator,
                                     recommendation.image,
                                     recommendation.sinopsis)
                             )

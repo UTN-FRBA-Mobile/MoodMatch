@@ -147,7 +147,7 @@ fun InicioSesion(
                 Font(R.font.poppins_normal)
             ),
             style = TextStyle(
-                fontSize = 20.sp,
+                fontSize = 18.sp,
             ),
             modifier = Modifier.padding(2.dp)
 
@@ -158,7 +158,7 @@ fun InicioSesion(
                 Font(R.font.poppins_bold)
             ),
             style = TextStyle(
-                fontSize = 20.sp,
+                fontSize = 18.sp,
                 color = colorResource(id = R.color.primary)
             ),
             modifier = Modifier.padding(2.dp)

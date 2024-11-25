@@ -82,12 +82,12 @@ fun InformationScreen(
         ) {
             // Header con imagen de perfil, logo y ícono de menú
             Header()
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.weight(1F))
             AsyncImage(
                 model = someThing.image,
                 contentDescription = "imagen descriptiva",
                 modifier = Modifier
-                    .height(100.dp)
+                    .height(100.dp).weight(10F)
                     .fillMaxWidth(),
                 contentScale = ContentScale.Fit
             )
@@ -96,26 +96,26 @@ fun InformationScreen(
                         .width(200.dp)
                 //modifier = Modifier.fillMaxWidth()*/
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.weight(1F))
             GeneralInformation(someThing)
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.weight(1F))
             Sinopsis(someThing.sinopsis)
             when (someThing){
                 is Movie -> Platform(someThing.plataforma)
                 is Series -> Platform(someThing.plataforma)
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.weight(0.5F))
             when (someThing) {
                 is Movie -> Score(someThing.score.toString())
                 is Book -> Score(someThing.score.toString())
                 is Series -> Score(someThing.score.toString())
             }
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.weight(1F))
             when (someThing){
                 is Movie -> PurpleButton(text = stringResource(R.string.ver_ahora), onClick = { launchApp(context,someThing.plataforma) })
                 is Series -> PurpleButton(text = stringResource(R.string.ver_ahora), onClick = { launchApp(context,someThing.plataforma) })
             }
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.weight(1F))
 
         }
     }
@@ -215,11 +215,11 @@ fun Platform(plataforma:Platform){
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 24.dp)
-            .padding(12.dp), // Padding interno del contenedor
+            .padding(4.dp), // Padding interno del contenedor
         contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -227,7 +227,7 @@ fun Platform(plataforma:Platform){
                 textAlign = TextAlign.Center,
                 color = Color.DarkGray
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.weight(1F))
             when(plataforma) {
                 Platform.NETFLIX -> painter = painterResource(id = R.drawable.netflix)
                 Platform.PRIME -> painter = painterResource(id = R.drawable.prime_video)
@@ -252,7 +252,7 @@ fun GeneralInformation(elemento: Enterteinment){
         Text(
             buildAnnotatedString {
 
-                withStyle(style = ParagraphStyle(lineHeight = 30.sp)) {
+                withStyle(style = ParagraphStyle(lineHeight = 1.5.em)) {
                     withStyle(style = SpanStyle(color = Color.DarkGray)) {
                         append(nombre + ": ")
                     }

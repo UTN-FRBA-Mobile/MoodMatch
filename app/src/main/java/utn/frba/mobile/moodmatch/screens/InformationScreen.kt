@@ -105,17 +105,62 @@ fun InformationScreen(
                 is Series -> Platform(someThing.plataforma)
             }
             Spacer(modifier = Modifier.height(16.dp))
-            when (someThing){
+            when (someThing) {
                 is Movie -> Score(someThing.score.toString())
                 is Book -> Score(someThing.score.toString())
                 is Series -> Score(someThing.score.toString())
             }
-
             Spacer(modifier = Modifier.height(20.dp))
-            PurpleButton(text = stringResource(R.string.ver_ahora), onClick = { launchNetflix(context,"81630891") })
+            when (someThing){
+                is Movie -> PurpleButton(text = stringResource(R.string.ver_ahora), onClick = { launchApp(context,someThing.plataforma) })
+                is Series -> PurpleButton(text = stringResource(R.string.ver_ahora), onClick = { launchApp(context,someThing.plataforma) })
+            }
             Spacer(modifier = Modifier.height(15.dp))
 
         }
+    }
+}
+
+fun launchApp(context: Context,platform: Platform){
+    when(platform){
+        Platform.NETFLIX -> launchNetflix(context,"81630891")
+        Platform.HBO -> launchHboApp(context,"f0a4f239-0b57-47e2-a39a-54fb96925e61")
+        Platform.PRIME -> launchPrimeApp(context,"0TISNLNDTS29PHKMC3DUWISVLC")
+        else -> launchHboApp(context,"f0a4f239-0b57-47e2-a39a-54fb96925e61")
+    }
+}
+
+fun launchPrimeApp(context: Context,id: String) {
+    val packageName = "com.amazon.avod.thirdpartyclient" // Or the appropriate package name
+    val intent = Intent(
+        Intent.ACTION_VIEW,
+        Uri.parse("https://www.primevideo.com/detail/$id")
+    )
+    try {
+        context.startActivity(intent)
+    } catch (e: Exception) {
+        val playStoreIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
+        )
+        context.startActivity(playStoreIntent)
+    }
+}
+
+fun launchHboApp(context: Context,id: String) {
+    val packageName = "com.wbd.stream" // Or the appropriate package name
+    val intent = Intent(
+        Intent.ACTION_VIEW,
+        Uri.parse("https://play.max.com/movie/$id")
+    )
+    try {
+        context.startActivity(intent)
+    } catch (e: Exception) {
+        val playStoreIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
+        )
+        context.startActivity(playStoreIntent)
     }
 }
 

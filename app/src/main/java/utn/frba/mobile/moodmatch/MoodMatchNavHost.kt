@@ -196,7 +196,7 @@ fun AppTabsNavGraph() {
                                     recommendation.type,
                                     recommendation.image,
                                     recommendation.sinopsis,
-                                    recommendation.score.toDouble(),
+                                    Math.round(recommendation.score* 100.0)/100.toDouble(),
                                     recommendation.creator)
                             )
                         }else if (recommendation.type=="Book"){
@@ -209,7 +209,7 @@ fun AppTabsNavGraph() {
                                     recommendation.type,
                                     recommendation.image,
                                     recommendation.sinopsis,
-                                    recommendation.score.toDouble())
+                                    Math.round(recommendation.score * 100.0)/100.toDouble())
                             )
                         } else{
                             InformationScreen(

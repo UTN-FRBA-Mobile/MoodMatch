@@ -1,6 +1,9 @@
 package utn.frba.mobile.moodmatch.screens
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.ParagraphStyle
@@ -39,6 +43,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import utn.frba.mobile.moodmatch.R
@@ -52,6 +57,7 @@ import utn.frba.mobile.moodmatch.data.model.Movie
 import utn.frba.mobile.moodmatch.data.model.Series
 import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModel
 
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun InformationScreen(
@@ -60,7 +66,7 @@ fun InformationScreen(
     viewModel: MainViewModel
 ) {
 
-    //val navController = rememberNavController()
+    val context = LocalContext.current
     val recommendation = viewModel.selectedRecommendation
 
     Log.d("InformationScreen", " recommendation: $recommendation")
@@ -106,12 +112,35 @@ fun InformationScreen(
             }
 
             Spacer(modifier = Modifier.height(20.dp))
-            PurpleButton(text = stringResource(R.string.ver_ahora), onClick = { ->"10" })
+            PurpleButton(text = stringResource(R.string.ver_ahora), onClick = { launchNetflix(context,"81630891") })
             Spacer(modifier = Modifier.height(15.dp))
+
         }
     }
 }
 
+fun launchNetflix(context:Context,id:String){
+    val watchUrl = "https://www.netflix.com/title/$id"
+    val intent = Intent(
+        Intent.ACTION_VIEW,
+        Uri.parse(watchUrl)
+    )
+
+    try {
+        intent.setClassName(
+            "com.netflix.mediaclient",
+            "com.netflix.mediaclient.ui.launch.UIWebViewActivity"
+        )
+        context.startActivity(intent)
+    } catch (e: Exception) {
+        val playStoreIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://play.google.com/store/apps/details?id=com.netflix.mediaclient")
+        )
+        context.startActivity(playStoreIntent)
+    }
+    context.startActivity(intent)
+}
 
 @Composable
 fun Score(puntuacion:String){
@@ -121,9 +150,6 @@ fun Score(puntuacion:String){
                 R.drawable.ic_star_outline
             ),
             contentDescription = "Puntuacion",
-
-
-
             modifier = Modifier
                 .size(20.dp),
             Color.Yellow
@@ -139,6 +165,7 @@ fun Score(puntuacion:String){
 
 @Composable
 fun Platform(plataforma:Platform){
+    var painter = painterResource(id = R.drawable.prime_video)
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -156,24 +183,20 @@ fun Platform(plataforma:Platform){
                 color = Color.DarkGray
             )
             Spacer(modifier = Modifier.height(20.dp))
-            if(plataforma == Platform.NETFLIX) {
-                Image(
-                    painter = painterResource(id = R.drawable.netflix),
-                    contentDescription = "Netflix",
-                    modifier = Modifier.size(64.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                )
+            when(plataforma) {
+                Platform.NETFLIX -> painter = painterResource(id = R.drawable.netflix)
+                Platform.PRIME -> painter = painterResource(id = R.drawable.prime_video)
+                Platform.HBO -> painter = painterResource(id = R.drawable.hbo)
+                else -> painter = painterResource(id = R.drawable.prime_video)
             }
-            if(plataforma == Platform.PRIME || plataforma == Platform.NA) {
-                Image(
-                    painter = painterResource(id = R.drawable.prime_video),
-                    contentDescription = "Netflix",
-                    modifier = Modifier.size(64.dp)
+            Image (
+                painter = painter,
+                contentDescription = "plataforma",
+                modifier = Modifier
+                    .size(64.dp)
                     .clip(RoundedCornerShape(16.dp))
-                )
-            }
+            )
         }
-
     }
 }
 

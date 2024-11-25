@@ -70,11 +70,7 @@ fun RecommendationScreen(
                     modifier = Modifier.padding(8.dp)
                 )
 
-                if (emocion != null) {
-                    MoodSection(mood = emocion)
-                } else {
-                    MoodSection(mood = Mood.NEUTRAL)
-                }
+                MoodSection(mood = emocion ?: Mood.NEUTRAL)
 
                 // Mostrar cargador si está cargando
                 if (isLoading) {

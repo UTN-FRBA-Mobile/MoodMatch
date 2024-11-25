@@ -3,6 +3,7 @@ package utn.frba.mobile.moodmatch.screens
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -26,7 +28,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
 import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
 import utn.frba.mobile.moodmatch.common.Header
@@ -53,7 +55,32 @@ fun MoodSelectorScreen(navController: NavHostController) {
         Mood.INCREDIBLE
     )
 
-    var selectedMoodIndex by remember { mutableStateOf(1) }
+    var selectedMoodIndex by remember { mutableStateOf(2) } // Inicialmente centrado en "Neutral"
+    val listState = rememberLazyListState()
+
+    // Detectar el elemento más cercano al centro después de scrollear
+    LaunchedEffect(listState.isScrollInProgress) {
+        if (!listState.isScrollInProgress) {
+            val center = listState.layoutInfo.viewportStartOffset + listState.layoutInfo.viewportEndOffset / 2
+            val closestItem = listState.layoutInfo.visibleItemsInfo.minByOrNull {
+                kotlin.math.abs(it.offset + it.size / 2 - center)
+            }
+            closestItem?.let {
+                if (it.index != selectedMoodIndex) {
+                    selectedMoodIndex = it.index
+                    // Usar una corrutina para centrar automáticamente
+                    launch {
+                        listState.animateScrollToItem(it.index)
+                    }
+                }
+            }
+        }
+    }
+
+    // Usar `LaunchedEffect` para manejar el scroll al seleccionar un mood
+    LaunchedEffect(selectedMoodIndex) {
+        listState.animateScrollToItem(selectedMoodIndex)
+    }
 
     Scaffold {
         Column(
@@ -71,7 +98,10 @@ fun MoodSelectorScreen(navController: NavHostController) {
             MoodCarousel(
                 moods = moods,
                 selectedMoodIndex = selectedMoodIndex,
-                onMoodSelected = { selectedMoodIndex = it }
+                onMoodSelected = { index ->
+                    selectedMoodIndex = index // Actualizar el índice seleccionado
+                },
+                listState = listState
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -85,66 +115,64 @@ fun MoodSelectorScreen(navController: NavHostController) {
     }
 }
 
+
 @Composable
 fun MoodCarousel(
     moods: List<Mood>,
     selectedMoodIndex: Int,
-    onMoodSelected: (Int) -> Unit
+    onMoodSelected: (Int) -> Unit,
+    listState: LazyListState
 ) {
-    val listState = rememberLazyListState()
+    // Ajustes de diseño
+    val itemSize = 80.dp
+    val itemSpacing = 32.dp
+    val paddingHorizontal = (itemSize + itemSpacing) / 2
 
-    // Detectar el elemento centrado en el carrusel
-    LaunchedEffect(listState) {
-        snapshotFlow { listState.layoutInfo.visibleItemsInfo }
-            .collect { visibleItems ->
-                val center = listState.layoutInfo.viewportStartOffset + listState.layoutInfo.viewportEndOffset / 2
-                val closestItem = visibleItems.minByOrNull {
-                    kotlin.math.abs(it.offset + it.size / 2 - center)
-                }
-                closestItem?.let { onMoodSelected(it.index) }
-            }
-    }
+    LazyRow(
+        state = listState,
+        horizontalArrangement = Arrangement.spacedBy(itemSpacing),
+        contentPadding = PaddingValues(horizontal = paddingHorizontal)
+    ) {
+        itemsIndexed(moods) { index, mood ->
+            val isSelected = index == selectedMoodIndex
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        LazyRow(
-            state = listState,
-            horizontalArrangement = Arrangement.spacedBy(24.dp),
-            contentPadding = PaddingValues(horizontal = 64.dp)
-        ) {
-            itemsIndexed(moods) { index, mood ->
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .size(if (index == selectedMoodIndex) 80.dp else 64.dp)
-                        .background(Color(0xFFFFF0E5), shape = CircleShape)
-                        .padding(8.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = mood.emojiResId),
-                        contentDescription = stringResource(id = mood.moodTextResId),
-                        modifier = Modifier.size(if (index == selectedMoodIndex) 60.dp else 40.dp)
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(if (isSelected) 100.dp else 80.dp)
+                    .background(
+                        color = if (isSelected) Color(0xFFFFE0B2) else Color(0xFFFFF0E5),
+                        shape = CircleShape
                     )
-                }
+                    .padding(8.dp)
+                    .clickable { onMoodSelected(index) }
+            ) {
+                Image(
+                    painter = painterResource(id = mood.emojiResId),
+                    contentDescription = stringResource(id = mood.moodTextResId),
+                    modifier = Modifier.size(if (isSelected) 60.dp else 48.dp)
+                )
             }
         }
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    // Texto y puntos indicadores
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = stringResource(id = moods[selectedMoodIndex].moodTextResId),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Texto con el nombre del Mood seleccionado
-        Text(
-            text = stringResource(id = moods[selectedMoodIndex].moodTextResId),
-            fontSize = 16.sp,
-            fontWeight = FontWeight.SemiBold
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Indicadores de selección
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             moods.forEachIndexed { index, _ ->
                 Box(
                     modifier = Modifier
-                        .size(if (index == selectedMoodIndex) 8.dp else 6.dp)
+                        .size(if (index == selectedMoodIndex) 10.dp else 6.dp)
                         .background(
                             if (index == selectedMoodIndex) Color.Gray else Color.LightGray,
                             shape = CircleShape

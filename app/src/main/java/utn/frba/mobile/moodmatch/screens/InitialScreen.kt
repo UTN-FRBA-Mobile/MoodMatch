@@ -136,7 +136,11 @@ fun ButtonRegistro(
 @Composable
 fun InicioSesion(
 ) {
-    Row(modifier = Modifier.padding(40.dp)){
+    Row(modifier = Modifier
+        .padding(40.dp)
+        .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ){
         Text(
             text = stringResource(id = R.string.ya_registrado).uppercase(),
             fontFamily = FontFamily(

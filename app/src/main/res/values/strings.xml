@@ -29,7 +29,7 @@
     <string name="leave_your_opinion_esp">Dejá tu opinión sobre</string>
     <string name="ready_esp">Listo</string>
     <string name="leave_your_review_here_esp">Escribe tu reseña aquí...</string>
-
+    <string name="noMoodSelected">Selecciona un humor para poder ver las recomendaciones</string>
     <string name="hola">Hola</string>
     <string name="peliculas">Películas</string>
     <string name="libros">Libros</string>
@@ -43,4 +43,10 @@
     <string name="esperamos_ayudarte">Esperamos que MoodMatch pueda ayudarte hoy</string>
     <string name="recomendaciones">Recomendaciones según tus vistas</string>
     <string name="elegi_recomendacion">Elegí la recomendación que haga match con vos</string>
+    <string name="ver_ahora">Ver ahora</string>
+    <string name="titulo">Titulo</string>
+    <string name="genero">Genero</string>
+    <string name="director">Director</string>
+    <string name="autor">Autor</string>
+    <string name="clasificacion">Clasificacion</string>
 </resources>

@@ -171,13 +171,12 @@ class MainViewModel() : ViewModel() {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     result = repository.fetchBooks()
-                    Log.d("2 MIAN VIEW MODEL", result.toString())
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
         }
-        Log.d("2 MIAN VIEW MODEL ABAJO", result.toString())
+
         return result
     }
 

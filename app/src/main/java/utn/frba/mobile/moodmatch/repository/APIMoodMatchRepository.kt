@@ -1,6 +1,5 @@
 package utn.frba.mobile.moodmatch.repository
 
-import android.util.Log
 import utn.frba.mobile.moodmatch.common.Mood
 import utn.frba.mobile.moodmatch.data.model.*
 import utn.frba.mobile.moodmatch.data.network.RetrofitServiceFactory
@@ -23,7 +22,6 @@ class APIMoodMatchRepository {
     }
 
     suspend fun fetchBooks(): List<Book> {
-        Log.d("1 NAV CONTROLLER", apiService.getBooks().toString())
         return apiService.getBooks()
     }
 

@@ -1,6 +1,7 @@
 package utn.frba.mobile.moodmatch.screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -11,34 +12,47 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.common.Backgroud
-import utn.frba.mobile.moodmatch.common.BottomNavigationBar
 import utn.frba.mobile.moodmatch.common.Header
 import utn.frba.mobile.moodmatch.common.Mood
-import utn.frba.mobile.moodmatch.common.Recommendation
 import utn.frba.mobile.moodmatch.common.RecommendationCarousel
-import utn.frba.mobile.moodmatch.ui.theme.MoodMatchTheme
+import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RecommendationScreen() {
-    Scaffold(
-        bottomBar = {
-            BottomNavigationBar() // Llamamos a la función que contiene nuestra barra de navegación
-        } ){
+fun RecommendationScreen(
+    emocion: Mood,
+    navController: NavController,
+    viewModel: MainViewModel
+) {
+    val recommendations by viewModel.recommendations.collectAsState()
+    val isLoading by viewModel.isLoading
+
+    // Lanzamos la llamada a la API en un efecto
+    LaunchedEffect(emocion) {
+        viewModel.getRecommendations(emocion)
+    }
+
+    Log.d("RecommendationsScreen", "Recommendations fetched: $recommendations")
+
+    Scaffold{
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -53,15 +67,33 @@ fun RecommendationScreen() {
                     text = stringResource(R.string.recommendation_screen_greet_esp),
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(8.dp)
                 )
 
-                // Emoji y estado de ánimo
-                MoodSection(mood=Mood.NEUTRAL)
+                if (emocion != null) {
+                    MoodSection(mood = emocion)
+                } else {
+                    MoodSection(mood = Mood.NEUTRAL)
+                }
 
-                // Recomendaciones
-                RecommendationCarousel(recommendationList)
-
+                // Mostrar cargador si está cargando
+                if (isLoading) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                } else {
+                    // Mostrar RecommendationsCarousel si hay datos
+                    if (recommendations.isNotEmpty()) {
+                        RecommendationCarousel(
+                            recommendationList = recommendations,
+                            navController = navController,
+                            viewModel = viewModel
+                            )
+                    } else {
+                        Text(
+                            "No recommendations available.",
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                    }
+                }
                 // Botones de acciones
                 ActionButtons()
             }
@@ -100,20 +132,3 @@ fun ActionButtons() {
         }
     }
 }
-
-@Preview
-@Composable
-fun RecommendationScreenPreview(){
-    MoodMatchTheme {
-        RecommendationScreen()
-    }
-}
-
-// Datos de ejemplo
-// TODO: Tomar datos de API
-val recommendationList = listOf(
-    Recommendation("PELÍCULA", "El señor de la guerra", R.drawable.lord_of_war, 8.0F),
-    Recommendation("SERIE", "Westworld", R.drawable.westworld, 7.5F),
-    // Añade más recomendaciones aquí
-)
-

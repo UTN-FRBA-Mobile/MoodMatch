@@ -1,5 +1,6 @@
 package utn.frba.mobile.moodmatch.common
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,14 +18,13 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -43,7 +43,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import utn.frba.mobile.moodmatch.R
+import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModel
 
 //Esto va aca?
 enum class Mood(val emojiResId: Int, val moodTextResId: Int) {
@@ -54,14 +57,22 @@ enum class Mood(val emojiResId: Int, val moodTextResId: Int) {
     ANGRY(R.drawable.ic_emoji_angry, R.string.angry_esp)
 }
 
-enum class Recomendations(val moodTextResId: Int) {
-    FILM(R.string.pelicula),
-    BOOK(R.string.libro),
-    ACTIVITY(R.string.actividad),
-    SERIE(R.string.serie)
+enum class Platform() {
+    NETFLIX(),
+    PRIME(),
+    HBO(),
+    NA() // No aplica
 }
 
-data class Recommendation(val title: String, val subtitle: String, val image: Int, val score:Float)
+data class Recommendation(
+    val title: String,
+    val creator: String,
+    val image: String,
+    val score:Float,
+    val type:String,
+    val sinopsis:String,
+    val platform: Platform
+)
 
 @Composable
 fun Backgroud(): Brush {
@@ -77,11 +88,11 @@ fun Backgroud(): Brush {
 }
 
 @Composable
-fun Header(modifier: Modifier = Modifier) {
+fun Header() {
     Box(modifier = Modifier
         .fillMaxWidth()
         .wrapContentHeight()
-        .padding(25.dp),
+        .padding(20.dp),
         contentAlignment = Alignment.Center)
     {
         Row(modifier = Modifier
@@ -130,7 +141,11 @@ fun Header(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun RecommendationCarousel(recommendationList: List<Recommendation> ) {
+fun RecommendationCarousel(
+    recommendationList: List<Recommendation> ,
+    navController: NavController,
+    viewModel: MainViewModel
+    ) {
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
@@ -138,18 +153,34 @@ fun RecommendationCarousel(recommendationList: List<Recommendation> ) {
         horizontalArrangement = Arrangement.spacedBy(16.dp) // Espacio entre tarjetas
     ) {
         items(recommendationList) { recommendation ->
-            RecommendationCard(recommendation)
+            RecommendationCard(
+                recommendation = recommendation,
+                navController = navController,
+                viewModel = viewModel)
         }
     }
 }
 
 @Composable
-fun RecommendationCard(recommendation: Recommendation) {
+fun RecommendationCard(
+    recommendation: Recommendation,
+    navController: NavController,
+    viewModel: MainViewModel
+) {
+    var title = recommendation.title
     Card(
+        onClick = {
+            // Guarda la recomendación en el ViewModel
+            viewModel.setRecommendation(recommendation)
+            val title = viewModel.selectedRecommendation?.title
+            Log.d("RecCard", "Recomendation: $title")
+
+            // Navega a la pantalla de información
+            navController.navigate("information/$title")},
         modifier = Modifier
             .width(200.dp)
-            .height(210.dp)
-            .clickable { /* Acción al hacer clic en la tarjeta */ },
+            .height(200.dp)
+            .clickable {},
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White // Color de fondo de la tarjeta
@@ -159,12 +190,14 @@ fun RecommendationCard(recommendation: Recommendation) {
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(id = recommendation.image),
-                contentDescription = null,
+            AsyncImage(
+                model = recommendation.image,
+                contentDescription = "imagen descriptiva",
                 modifier = Modifier
                     .height(100.dp)
                     .fillMaxWidth(),
@@ -178,7 +211,7 @@ fun RecommendationCard(recommendation: Recommendation) {
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = recommendation.subtitle,
+                text = recommendation.creator,
                 textAlign = TextAlign.Center,
                 color = Color.Gray
             )
@@ -198,72 +231,25 @@ fun RecommendationCard(recommendation: Recommendation) {
 
 
 @Composable
-fun BottomNavigationBar() {
-    NavigationBar(
-        containerColor = Color.Transparent,
-        contentColor = Color.Gray
-    ) {
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painterResource(
-                        id = R.drawable.ic_home
-                    ),
-                    contentDescription = stringResource(R.string.home),
-                    modifier = Modifier.size(20.dp)
-                )
-            },
-            selected = true,
-            onClick = { /* Acción Home */ },
-            label = { Text(text = stringResource(id = R.string.home)) }
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painterResource(id = R.drawable.ic_mood),
-                    contentDescription = stringResource(id = R.string.mood),
-                    modifier = Modifier.size(45.dp),
-                    tint = Color.Unspecified
-                )
-            },
-            selected = false,
-            onClick = { /* Acción Mood */ },
-            label = { Text(text = stringResource(id = R.string.mood)) }
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painterResource(id = R.drawable.ic_community),
-                    contentDescription = stringResource(R.string.comunity_esp),
-                    modifier = Modifier.size(20.dp)
-                )
-            },
-            selected = false,
-            onClick = { /* Acción Comunidad */ },
-            label = { Text(text = stringResource(id = R.string.comunity_esp)) }
-        )
-    }
-}
-
-//TODO: pasar funcion como parametro? para el onClick
-@Composable
-fun PurpleButton(text: String) {
-    Button(
-        onClick = { /* Acción de selección */ },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 48.dp)
-            .height(50.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF7B61FF),
-            contentColor = Color.White
-        ),
-        shape = RoundedCornerShape(24.dp)
-    ) {
-        Text(
-            text = text,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
-        )
+fun PurpleButton(text: String, onClick: (() -> Unit)? ) {
+    if (onClick != null) {
+        Button(
+            onClick = onClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 48.dp)
+                .height(50.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF7B61FF),
+                contentColor = Color.White
+            ),
+            shape = RoundedCornerShape(24.dp)
+        ) {
+            Text(
+                text = text,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }

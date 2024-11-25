@@ -1,7 +1,6 @@
 package utn.frba.mobile.moodmatch
 
-import android.R.attr.type
-import android.util.Log
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -10,6 +9,8 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,9 +29,9 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import utn.frba.mobile.moodmatch.common.Mood
 import utn.frba.mobile.moodmatch.common.Platform
+import utn.frba.mobile.moodmatch.common.Recommendation
 import utn.frba.mobile.moodmatch.data.model.Activity
 import utn.frba.mobile.moodmatch.data.model.Book
-import utn.frba.mobile.moodmatch.data.model.Enterteinment
 import utn.frba.mobile.moodmatch.data.model.Movie
 import utn.frba.mobile.moodmatch.navigator.moodMatchBottomRowScreens
 import utn.frba.mobile.moodmatch.repository.UserRepositoryImp
@@ -85,6 +86,7 @@ fun MoodMatchNavHost(
     }
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun AppTabsNavGraph() {
     val viewModel: MainViewModel = viewModel(factory = MainViewModelFactory())
@@ -237,22 +239,65 @@ fun AppTabsNavGraph() {
                     }
                 )
             ) { backStackEntry ->
-                var recommendationList: List<Enterteinment> = listOf()
-                val type = backStackEntry.arguments?.getString("tipo");
-                
-                if(type.equals("books") || type.equals("movies")) {
+                val recommendationList: List<Recommendation>
+                val type = backStackEntry.arguments?.getString("tipo")
+
                 if(type.equals("books")) {
-                    recommendationList = viewModel.getBooks()
-                    Log.d("3 NAV HOST", recommendationList.toString())
-                } else if(type.equals("moovies")) {
-                    recommendationList = viewModel.getMovies()
-                } 
-                ContentListScreen(
-                    recommendationList = recommendationList
-                ) 
+                    LaunchedEffect(Unit) {
+                        viewModel.getBooks()
+                    }
+                    val bookList by viewModel.books.collectAsState()
+                    recommendationList = bookList.map { b ->
+                        Recommendation(
+                            title= b.name,
+                            creator= b.autor,
+                            image= b.image,
+                            score= b.score.toFloat(),
+                            type = "books",
+                            sinopsis = b.sinopsis,
+                            platform = Platform.NA
+                        )
+                    }
+                } else if(type.equals("movies")) {
+                    LaunchedEffect(Unit) {
+                        viewModel.getMovies()
+                    }
+                    val moviesList by viewModel.movies.collectAsState()
+                    recommendationList = moviesList.map { b ->
+                        Recommendation(
+                            title= b.name,
+                            creator= b.director,
+                            image= b.image,
+                            score= b.score.toFloat(),
+                            type = "movies",
+                            sinopsis = b.sinopsis,
+                            platform = b.plataforma ?: Platform.NA
+                        )
+                    }
                 }
-                if (type.equals("meditations")) {
-                    Text(text = "Pantalla en construccion")
+                else {
+                    LaunchedEffect(Unit) {
+                        viewModel.getRecreationalActivities()
+                    }
+                    val activitiesList by viewModel.recreationalActivities.collectAsState()
+                    recommendationList = activitiesList.map { b ->
+                        Recommendation(
+                            title= b.name,
+                            creator= "",
+                            image= b.image,
+                            score= 0f,
+                            type = "activities",
+                            sinopsis = b.sinopsis,
+                            platform = Platform.NA
+                        )
+                    }
+                }
+                if (type != null) {
+                    ContentListScreen(
+                        recommendationList = recommendationList,
+                        navController = navController,
+                        viewModel = viewModel
+                    )
                 }
             }
         }

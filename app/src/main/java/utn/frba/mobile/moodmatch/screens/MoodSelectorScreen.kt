@@ -3,7 +3,6 @@ package utn.frba.mobile.moodmatch.screens
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -61,6 +60,11 @@ fun MoodSelectorScreen(navController: NavHostController) {
     var selectedMoodIndex by remember { mutableStateOf(3) } // Inicialmente centrado en "Neutral"
     val listState = rememberLazyListState()
 
+    // Desplazamiento inicial para centrar "Neutral"
+    LaunchedEffect(Unit) {
+        listState.scrollToItem(2) // Índice del mood "Neutral"
+    }
+
     // Detectar el elemento más cercano al centro después de scrollear
     LaunchedEffect(listState.isScrollInProgress) {
         if (!listState.isScrollInProgress) {
@@ -82,11 +86,6 @@ fun MoodSelectorScreen(navController: NavHostController) {
                 }
             }
         }
-    }
-
-    // Asegurarnos de centrar el elemento inicial seleccionado
-    LaunchedEffect(Unit) {
-        listState.animateScrollToItem(selectedMoodIndex)
     }
 
     Scaffold {
@@ -131,7 +130,7 @@ fun MoodCarousel(
 ) {
     val itemSize = 80.dp
     val itemSpacing = 32.dp
-    val paddingHorizontal = (itemSize + itemSpacing) / 2
+    val paddingHorizontal = (itemSize + itemSpacing) / 15F
 
     LazyRow(
         state = listState,
@@ -154,7 +153,6 @@ fun MoodCarousel(
                             shape = CircleShape
                         )
                         .padding(8.dp)
-                        .clickable { onMoodSelected(index) }
                 ) {
                     Image(
                         painter = painterResource(id = mood.emojiResId),
@@ -192,6 +190,7 @@ fun MoodCarousel(
         }
     }
 }
+
 
 @Composable
 fun HeaderSection() {

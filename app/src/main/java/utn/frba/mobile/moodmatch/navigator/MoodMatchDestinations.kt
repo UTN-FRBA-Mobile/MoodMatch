@@ -1,10 +1,5 @@
 package utn.frba.mobile.moodmatch.navigator
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.ui.graphics.vector.ImageVector
 import utn.frba.mobile.moodmatch.R
 
 sealed interface MoodMatchDestination {

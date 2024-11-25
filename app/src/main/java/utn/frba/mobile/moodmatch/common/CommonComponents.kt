@@ -48,6 +48,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import utn.frba.mobile.moodmatch.R
 import utn.frba.mobile.moodmatch.screens.viewmodel.MainViewModel
+import java.util.Locale
 
 //Esto va aca?
 enum class Mood(val emojiResId: Int, val moodTextResId: Int) {
@@ -253,5 +254,19 @@ fun PurpleButton(text: String, onClick: (() -> Unit)? ) {
                 fontWeight = FontWeight.Bold
             )
         }
+    }
+}
+
+@Composable
+fun getTypeName(type: String): String {
+    return when (type.lowercase(Locale.getDefault())) {
+        "book" -> stringResource(id = R.string.libro)
+        "movie" -> stringResource(id = R.string.pelicula)
+        "series" -> stringResource(id = R.string.serie)
+        "activity" -> stringResource(id = R.string.actividad)
+        "books" -> stringResource(id = R.string.libros)
+        "movies" -> stringResource(id = R.string.peliculas)
+        "activities" -> stringResource(id = R.string.actividades)
+        else -> "Unknown Type"
     }
 }

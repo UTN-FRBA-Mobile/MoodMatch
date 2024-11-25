@@ -2,12 +2,14 @@ package utn.frba.mobile.moodmatch.screens
 
 import android.annotation.SuppressLint
 import android.graphics.Color.rgb
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -297,13 +299,11 @@ fun RecommendationCard(
     }
 }
 
-//todo usar el de commons pero pisando el padding
 @Composable
 fun Header() {
     Box(modifier = Modifier
         .fillMaxWidth()
         .wrapContentHeight(),
-        // todo arreglar el padding para home
         contentAlignment = Alignment.Center)
     {
         Row(modifier = Modifier

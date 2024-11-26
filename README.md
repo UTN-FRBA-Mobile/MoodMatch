@@ -55,6 +55,15 @@ La aplicación está conectada a un servidor backend, dicho servidor en la nube 
 
 ---
 
+🧪 Iniciar APP
+
+En caso que se quiera probar la aplicación, solo basta con correr ya sea desde el emulador de Android Studio o desde su telefono movil. Hay una consideración a tener en cuenta, que es tanto el email como contraseña para iniciar sesión, lo dejamos a continuación:
+
+    📧 Email : test@moodmatch.com
+    🔒 Contraseña: 1234
+
+---
+
 👩‍💻 Autor
 
 Desarrollado por Grupo MoodMatch 🎓.
